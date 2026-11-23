@@ -1,2 +1,269 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<%# app/views/pages/home.html.erb %>
+<%# TODO: pointer vers personas_path / new_persona_path quand les routes existeront %>
+<% cta_path = user_signed_in? ? "#personas" : new_user_registration_path %>
+
+<div class="home">
+
+  <%# HERO %>
+  <section class="home-hero">
+    <div class="container">
+      <div class="row align-items-center g-4 g-lg-5">
+        <div class="col-lg-6">
+          <p class="home-eyebrow">Your characters. Your conversations.</p>
+          <h1 class="home-title">Chat with AI characters</h1>
+          <p class="home-lead">
+            Pick a persona, ask your questions and get answers in their own style.
+            Soon, create your own in a few clicks.
+          </p>
+          <%= link_to cta_path, class: "home-btn home-btn-dark" do %>
+            Start chatting <span aria-hidden="true">→</span>
+          <% end %>
+          <ul class="home-checks list-unstyled">
+            <li>Free to start</li>
+            <li>Nothing to install</li>
+            <li>Your chats saved</li>
+          </ul>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="home-visual">
+            <div class="home-chat-ghost" aria-hidden="true"></div>
+
+            <div class="home-chat">
+              <div class="home-chat-head">
+                <div class="home-chat-avatar">
+                  <%= image_tag "sherlock.jpg", alt: "" %>
+                  <span class="home-chat-online"></span>
+                </div>
+                <div class="home-chat-who">
+                  <strong>Sherlock Holmes</strong>
+                  <span>Detective · online</span>
+                </div>
+                <span class="home-chat-menu" aria-hidden="true">•••</span>
+              </div>
+
+              <div class="home-chat-body">
+                <span class="home-chat-day">Today</span>
+                <div class="home-msg home-msg-user">
+                  I lost my keys this morning, can you help?
+                  <time>09:41</time>
+                </div>
+                <div class="home-msg home-msg-ai">
+                  Elementary. Your shoes are still wet: you walked the dog.
+                  Check your coat pocket.
+                  <time>09:41</time>
+                </div>
+                <div class="home-typing" aria-label="Sherlock is typing">
+                  <span></span><span></span><span></span>
+                </div>
+                <div class="home-chat-suggestions">
+                  <span>How did you guess?</span>
+                  <span>What about my wallet?</span>
+                </div>
+              </div>
+
+              <div class="home-chat-input" aria-hidden="true">
+                <span>Ask Sherlock anything…</span>
+                <span class="home-chat-send">→</span>
+              </div>
+            </div>
+
+            <div class="home-chat-float">
+              <div class="home-avatars">
+                <%= image_tag "einstein.jpg", alt: "" %>
+                <%= image_tag "marie-curie.jpg", alt: "" %>
+              </div>
+              <span><strong>Einstein</strong> &amp; <strong>Marie Curie</strong><br>are also online</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# 01 HOW IT WORKS %>
+  <section class="home-section">
+    <div class="container">
+      <div class="home-heading text-center">
+        <span class="home-bignum">01</span>
+        <p class="home-eyebrow">How it works</p>
+        <h2 class="home-h2">Three steps to get started</h2>
+        <p class="home-lead mx-auto">One account, one character, and the conversation begins.</p>
+      </div>
+      <div class="row g-4 home-steps">
+        <%# Étape 1 : compte %>
+        <div class="col-md-4">
+          <div class="home-step">
+            <div class="home-step-visual" aria-hidden="true">
+              <div class="home-mini-form">
+                <span class="home-mini-field">ada@fabulae.app</span>
+                <span class="home-mini-field">••••••••</span>
+                <span class="home-mini-submit">Create account</span>
+              </div>
+            </div>
+            <span class="home-step-num">Step 01</span>
+            <h3>Create your account</h3>
+            <p>Your characters and conversations stay yours.</p>
+          </div>
+        </div>
+
+        <%# Étape 2 : choix du persona %>
+        <div class="col-md-4">
+          <div class="home-step">
+            <div class="home-step-visual" aria-hidden="true">
+              <div class="home-mini-pick">
+                <%= image_tag "sherlock.jpg", alt: "" %>
+                <%= image_tag "einstein.jpg", alt: "", class: "is-on" %>
+                <%= image_tag "marie-curie.jpg", alt: "" %>
+              </div>
+            </div>
+            <span class="home-step-num">Step 02</span>
+            <h3>Pick a persona</h3>
+            <p>Detective, scientist, pioneer: each one has its own tone and temper.</p>
+          </div>
+        </div>
+
+        <%# Étape 3 : conversation %>
+        <div class="col-md-4">
+          <div class="home-step">
+            <div class="home-step-visual" aria-hidden="true">
+              <div class="home-mini-chat">
+                <span class="home-mini-bubble is-user">Why is the sky blue?</span>
+                <span class="home-mini-bubble">Ah, let us imagine a ray of light…</span>
+              </div>
+            </div>
+            <span class="home-step-num">Step 03</span>
+            <h3>Chat</h3>
+            <p>Write freely or let the suggestions guide you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# 02 PERSONAS %>
+  <section class="home-section home-section-rose" id="personas">
+    <div class="container">
+      <div class="home-heading text-center">
+        <span class="home-bignum">02</span>
+        <p class="home-eyebrow">The personas</p>
+        <h2 class="home-h2">Who do you want to talk to?</h2>
+      </div>
+      <div class="home-deck">
+        <%# Personas d'exemple en dur, à remplacer par @personas quand le modèle existera %>
+        <% [
+          ["Sherlock Holmes", "A sharp detective who notices every detail and loves a good mystery.", "sherlock.jpg"],
+          ["Albert Einstein", "Curious and playful, he explains the universe with simple thought experiments.", "einstein.jpg"],
+          ["Marie Curie", "Determined and precise, a pioneer who turns every question into an experiment.", "marie-curie.jpg"]
+        ].each_with_index do |(name, description, image), index| %>
+          <div class="home-persona">
+            <%= image_tag image, alt: name, class: "home-persona-img", loading: "lazy" %>
+            <span class="home-persona-num"><%= format("%02d", index + 1) %></span>
+            <div class="home-persona-info">
+              <h3><%= name %></h3>
+              <p><%= description %></p>
+              <%= link_to cta_path, class: "home-persona-link" do %>
+                Chat <span aria-hidden="true">→</span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <%# 03 CREATION %>
+  <section class="home-section home-section-cream">
+    <div class="container">
+      <div class="row align-items-center g-4 g-lg-5">
+        <div class="col-lg-6">
+          <div class="home-heading mb-0">
+            <span class="home-bignum">03</span>
+            <p class="home-eyebrow">Creation tools</p>
+            <h2 class="home-h2">Create your own character</h2>
+            <p class="home-lead">Give it an identity, a way of speaking and a backstory.</p>
+          </div>
+          <ul class="home-dots list-unstyled">
+            <li>A name and a description</li>
+            <li>A personality and a reply style</li>
+            <li>An avatar to recognize it</li>
+          </ul>
+          <%= link_to cta_path, class: "home-btn home-btn-dark" do %>
+            Create a persona <span aria-hidden="true">→</span>
+          <% end %>
+        </div>
+        <div class="col-lg-6">
+          <div class="home-builder">
+            <div class="home-builder-head">
+              <div class="home-builder-avatar" aria-hidden="true">+</div>
+              <div>
+                <span class="home-builder-label">Name</span>
+                <strong>Ada, the night owl</strong>
+              </div>
+              <span class="home-builder-draft">Draft</span>
+            </div>
+
+            <% [
+              ["Role", %w[Explorer Detective Rival Coach Mentor], "Mentor"],
+              ["Tone", %w[Witty Calm Sarcastic Warm], "Witty"],
+              ["Reply style", %w[Short Storyteller Strategist Poet], "Storyteller"]
+            ].each do |label, tags, selected| %>
+              <div class="home-builder-group">
+                <span class="home-builder-label"><%= label %></span>
+                <div class="home-chips">
+                  <% tags.each do |tag| %>
+                    <span class="<%= "is-on" if tag == selected %>"><%= tag %></span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+
+            <p class="home-builder-preview">“Ah, a question at midnight. Let me tell you a story…”</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <%# FAQ %>
+  <section class="home-section">
+    <div class="container home-faq">
+      <div class="home-heading text-center">
+        <p class="home-eyebrow">FAQ</p>
+        <h2 class="home-h2">Frequently asked questions</h2>
+      </div>
+      <div class="accordion accordion-flush" id="homeFaq">
+        <% [
+          ["What is a persona?", "A character with its own personality and way of speaking. The AI stays in character when it replies."],
+          ["Are my conversations saved?", "Yes, give a chat a name to find it later in your history."],
+          ["Can I create my own character?", "Yes, once logged in you can create your personas and chat with them."],
+          ["How do I delete my account?", "From your profile. Your chats and personas are deleted along with the account."]
+        ].each_with_index do |(question, answer), index| %>
+          <div class="accordion-item">
+            <h3 class="accordion-header">
+              <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq<%= index %>">
+                <%= question %>
+              </button>
+            </h3>
+            <div id="faq<%= index %>" class="accordion-collapse collapse" data-bs-parent="#homeFaq">
+              <div class="accordion-body"><%= answer %></div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </section>
+
+  <%# FINAL CTA %>
+  <section class="home-cta text-center">
+    <div class="container">
+      <p class="home-eyebrow">Join the conversation</p>
+      <h2 class="home-h2">Your first character is waiting</h2>
+      <p class="home-lead mx-auto">Pick a persona and ask your first question.</p>
+      <%= link_to cta_path, class: "home-btn home-btn-white" do %>
+        Start chatting <span aria-hidden="true">→</span>
+      <% end %>
+    </div>
+  </section>
+
+</div>

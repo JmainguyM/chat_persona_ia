@@ -1,12 +1,125 @@
-.navbar-lewagon {
-  justify-content: space-between;
-  background: white;
+// Header dans le style de la homepage
+.fab-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1030;
+  padding: 14px 0;
+  background: rgba($home-bg, 0.9);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid $home-line;
+  font-family: $home-font;
 }
 
-.navbar-lewagon .navbar-collapse {
-  flex-grow: 0;
+.fab-logo {
+  color: $home-ink;
+  font-size: 1.6rem;
+  font-weight: 760;
+  letter-spacing: -0.06em;
+
+  &:hover { color: $home-ink; }
 }
 
-.navbar-lewagon .navbar-brand img {
+.fab-logo-dot { color: $home-garnet; }
+
+.fab-link {
+  color: $home-muted;
+  font-weight: 560;
+  font-size: 0.95rem;
+
+  &:hover { color: $home-ink; }
+  &:focus { color: $home-muted; }
+}
+
+.fab-auth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 16px;
+}
+
+.fab-user {
+  color: $home-ink;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.fab-btn {
+  justify-content: center;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+}
+
+// Bouton secondaire : contour fin, pas de fond
+.fab-btn-ghost {
+  border: 1px solid $home-line;
+  color: $home-ink;
+
+  &:hover { color: $home-ink; border-color: $home-ink; }
+}
+
+// Burger : 2 traits -> croix
+.fab-toggler {
+  position: relative;
   width: 40px;
+  height: 40px;
+  padding: 0;
+  border: none;
+  border-radius: 12px;
+  box-shadow: none;
+
+  &:focus { box-shadow: none; }
+
+  span {
+    position: absolute;
+    left: 10px;
+    width: 20px;
+    height: 2px;
+    border-radius: 2px;
+    background: $home-ink;
+    transition: transform 0.25s ease, top 0.25s ease;
+
+    &:first-child { top: 15px; }
+    &:last-child { top: 23px; }
+  }
+
+  &:not(.collapsed) span {
+    &:first-child { top: 19px; transform: rotate(45deg); }
+    &:last-child { top: 19px; transform: rotate(-45deg); }
+  }
+}
+
+@media (max-width: 991px) {
+  .fab-navbar .container { padding-left: 24px; padding-right: 24px; }
+}
+
+// Menu mobile : liste avec séparateurs + boutons en bas
+@media (max-width: 767px) {
+  .fab-navbar .navbar-collapse { margin-top: 12px; }
+
+  .fab-nav .fab-link {
+    padding: 14px 0;
+    border-top: 1px solid $home-line;
+    color: $home-ink;
+    font-size: 1.05rem;
+    font-weight: 600;
+  }
+
+  .fab-auth {
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 16px 0 8px;
+    border-top: 1px solid $home-line;
+
+    .fab-btn { flex: 1; }
+  }
+
+  .fab-user {
+    flex-basis: 100%;
+    color: $home-muted;
+    font-weight: 500;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fab-toggler span { transition: none; }
 }
