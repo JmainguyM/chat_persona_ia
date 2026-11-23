@@ -1,0 +1,17 @@
+<h1><%= @persona.name %></h1>
+
+<% if @persona.avatar_url.present? %>
+  <%= image_tag @persona.avatar_url, alt: @persona.name, width: 100 %>
+<% end %>
+
+<h2>Description</h2>
+<p><%= @persona.description %></p>
+
+<h2>System prompt</h2>
+<%= simple_format @persona.system_prompt %>
+
+<% if @persona.user == current_user %>
+  <%= link_to "Edit", edit_persona_path(@persona) %> |
+  <%= link_to "Delete", persona_path(@persona), data: { turbo_method: :delete, turbo_confirm: "Delete this persona?" } %> |
+<% end %>
+<%= link_to "Back", personas_path %>
