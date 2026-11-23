@@ -41,6 +41,9 @@
   color: $home-ink;
   font-weight: 600;
   font-size: 0.9rem;
+  text-decoration: none;
+
+  &:hover { color: $home-garnet; }
 }
 
 .fab-btn {
