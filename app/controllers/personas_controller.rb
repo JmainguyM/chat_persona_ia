@@ -27,7 +27,7 @@ class PersonasController < ApplicationController
 
   def update
     if @persona.update(persona_params)
-      redirect_to @persona, notice: "Persona mise à jour."
+      redirect_to @persona, notice: "Persona updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class PersonasController < ApplicationController
 
   def destroy
     @persona.destroy
-    redirect_to personas_path, notice: "Persona supprimée.", status: :see_other
+    redirect_to personas_path, notice: "Persona deleted.", status: :see_other
   end
 
   private
