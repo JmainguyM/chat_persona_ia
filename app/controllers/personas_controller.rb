@@ -1,5 +1,5 @@
 class PersonasController < ApplicationController
-  before_action :set_persona, only: [ :edit, :update, :destroy]
+  before_action :set_persona, only: %i[edit update destroy]
 
   def index
     @personas = Persona.all
