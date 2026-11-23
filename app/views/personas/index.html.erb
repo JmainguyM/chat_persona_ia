@@ -2,17 +2,13 @@
 
 <%= link_to "Nouvelle persona", new_persona_path %>
 
-<% if @personas.any? %>
-  <ul>
-    <% @personas.each do |persona| %>
-      <li>
-        <%= link_to persona.name, persona_path(persona) %>
-        <% if persona.description.present? %>
-          : <%= persona.description %>
-        <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% else %>
-  <p>Tu n'as pas encore de persona.</p>
-<% end %>
+<ul>
+  <% @personas.each do |persona| %>
+    <li>
+      <%= link_to persona.name, persona_path(persona) %>
+      <% if persona.description.present? %>
+        : <%= persona.description %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>

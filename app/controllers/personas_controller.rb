@@ -1,11 +1,12 @@
 class PersonasController < ApplicationController
-  before_action :set_persona, only: [:show, :edit, :update, :destroy]
+  before_action :set_persona, only: [ :edit, :update, :destroy]
 
   def index
-    @personas = current_user.personas
+    @personas = Persona.all
   end
 
   def show
+    @persona = Persona.find(params[:id])
   end
 
   def new
@@ -15,7 +16,7 @@ class PersonasController < ApplicationController
   def create
     @persona = current_user.personas.new(persona_params)
     if @persona.save
-      redirect_to @persona, notice: "Persona créée."
+      redirect_to @persona, notice: "Persona created."
     else
       render :new, status: :unprocessable_entity
     end

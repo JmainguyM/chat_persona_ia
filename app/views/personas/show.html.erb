@@ -8,8 +8,10 @@
 <p><%= @persona.description %></p>
 
 <h2>System prompt</h2>
-<p><%= simple_format @persona.system_prompt %></p>
+<%= simple_format @persona.system_prompt %>
 
-<%= link_to "Modifier", edit_persona_path(@persona) %> |
-<%= link_to "Supprimer", persona_path(@persona), data: { turbo_method: :delete, turbo_confirm: "Supprimer cette persona ?" } %> |
+<% if @persona.user == current_user %>
+  <%= link_to "Modifier", edit_persona_path(@persona) %> |
+  <%= link_to "Supprimer", persona_path(@persona), data: { turbo_method: :delete, turbo_confirm: "Supprimer cette persona ?" } %> |
+<% end %>
 <%= link_to "Retour", personas_path %>
