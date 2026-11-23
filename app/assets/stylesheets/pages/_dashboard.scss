@@ -142,7 +142,21 @@
   background: rgba(#fff, 0.6);
 
   h3 { font-size: 1.1rem; font-weight: 650; margin: 16px 0 6px; }
-  p { color: $home-muted; font-size: 0.9rem; margin-bottom: 16px; }
+  p { color: $home-muted; font-size: 0.9rem; margin-bottom: 0; }
+}
+
+// La carte "créer" est un lien
+a.dash-create {
+  color: $home-ink;
+  text-decoration: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+
+  &:hover {
+    border-color: $home-garnet;
+    background: #fff;
+
+    .dash-create-plus { background: $home-garnet; color: #fff; }
+  }
 }
 
 .dash-create-plus {
@@ -157,19 +171,11 @@
   font-weight: 600;
 }
 
-.dash-soon {
-  margin-top: auto;
-  padding: 4px 10px;
-  border-radius: 999px;
-  background: $home-cream;
-  border: 1px solid $home-line;
-  color: $home-muted;
-  font-size: 0.75rem;
-  font-weight: 600;
-}
 
 // Carte persona
 .dash-persona {
+  display: flex;
+  flex-direction: column;
   overflow: hidden;
   background: #fff;
   border: 1px solid $home-line;
@@ -191,10 +197,41 @@
 }
 
 .dash-persona-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   padding: 18px 20px 20px;
 
   h3 { font-size: 1.1rem; font-weight: 650; margin-bottom: 6px; }
   p { color: $home-muted; font-size: 0.9rem; line-height: 1.5; margin-bottom: 14px; }
+}
+
+// Avatar sans image : initiales sur fond prune
+.persona-initials {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, $home-plum, $home-garnet);
+  color: #fff;
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+}
+
+.dash-persona-actions {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dash-persona-edit {
+  color: $home-muted;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover { color: $home-ink; }
 }
 
 .dash-persona-link {
@@ -293,7 +330,7 @@
   .dash-tabs a { padding: 8px 10px; font-size: 0.85rem; }
 
   .dash-persona {
-    display: flex;
+    flex-direction: row;
     align-items: stretch;
   }
 

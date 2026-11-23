@@ -1,13 +1,7 @@
 <% content_for :title, "Dashboard · fabulae" %>
 
-<%# Données d'exemple en dur : à remplacer par current_user.conversations / current_user.personas / Persona.all quand les modèles existeront %>
+<%# TODO: remplacer par current_user.conversations quand le modèle Conversation existera %>
 <% conversations = [] %>
-<% my_personas = [] %>
-<% available_personas = [
-  ["Sherlock Holmes", "A sharp detective who notices every detail and loves a good mystery.", "sherlock.jpg"],
-  ["Albert Einstein", "Curious and playful, he explains the universe with simple thought experiments.", "einstein.jpg"],
-  ["Marie Curie", "Determined and precise, a pioneer who turns every question into an experiment.", "marie-curie.jpg"]
-] %>
 <% display_name = @user.username.presence || @user.email.split("@").first %>
 
 <div class="dash">
@@ -29,8 +23,8 @@
     <%# NAVIGATION INTERNE %>
     <nav class="dash-tabs" aria-label="Dashboard sections">
       <a href="#conversations">Conversations <span class="dash-count"><%= conversations.size %></span></a>
-      <a href="#my-personas">My personas <span class="dash-count"><%= my_personas.size %></span></a>
-      <a href="#explore">Explore <span class="dash-count"><%= available_personas.size %></span></a>
+      <a href="#my-personas">My personas <span class="dash-count"><%= @my_personas.size %></span></a>
+      <a href="#explore">Explore <span class="dash-count"><%= @available_personas.size %></span></a>
       <a href="#settings">Settings</a>
     </nav>
 
@@ -60,14 +54,13 @@
       </div>
 
       <div class="dash-grid">
-        <%# TODO: afficher current_user.personas ici %>
-        <%# TODO: lier vers new_persona_path quand la route existera %>
-        <div class="dash-create">
+        <%= link_to new_persona_path, class: "dash-create" do %>
           <span class="dash-create-plus" aria-hidden="true">+</span>
           <h3>Create a persona</h3>
           <p>Give it a name, a personality and a way of speaking.</p>
-          <span class="dash-soon">Coming soon</span>
-        </div>
+        <% end %>
+
+        <%= render partial: "dashboard_persona", collection: @my_personas, as: :persona, locals: { owned: true } %>
       </div>
     </section>
 
@@ -78,21 +71,16 @@
         <p class="dash-section-sub">Start a conversation with one of them.</p>
       </div>
 
-      <div class="dash-grid">
-        <% available_personas.each do |name, description, image| %>
-          <article class="dash-persona">
-            <%= image_tag image, alt: name, class: "dash-persona-img", loading: "lazy" %>
-            <div class="dash-persona-body">
-              <h3><%= name %></h3>
-              <p><%= description %></p>
-              <%# TODO: lier vers la création d'une conversation avec ce persona %>
-              <%= link_to "#", class: "dash-persona-link" do %>
-                Chat <span aria-hidden="true">→</span>
-              <% end %>
-            </div>
-          </article>
-        <% end %>
-      </div>
+      <% if @available_personas.any? %>
+        <div class="dash-grid">
+          <%= render partial: "dashboard_persona", collection: @available_personas, as: :persona, locals: { owned: false } %>
+        </div>
+      <% else %>
+        <div class="dash-empty">
+          <h3>No other personas yet</h3>
+          <p>Personas created by other users will show up here.</p>
+        </div>
+      <% end %>
     </section>
 
     <%# PARAMÈTRES DU COMPTE %>
