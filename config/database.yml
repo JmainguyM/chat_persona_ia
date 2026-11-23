@@ -85,20 +85,17 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
+  # Heroku provides a single database via DATABASE_URL and doesn't allow creating others.
+  # Solid Cache, Solid Queue and Solid Cable therefore share the primary database.
   primary: &primary_production
     <<: *default
-    database: chat_persona_ia_production
-    username: chat_persona_ia
-    password: <%= ENV["CHAT_PERSONA_IA_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *primary_production
-    database: chat_persona_ia_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: chat_persona_ia_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: chat_persona_ia_production_cable
     migrations_paths: db/cable_migrate
