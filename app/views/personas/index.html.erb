@@ -1,0 +1,14 @@
+<h1>My personas</h1>
+
+<%= link_to "New persona", new_persona_path %>
+
+<ul>
+  <% @personas.each do |persona| %>
+    <li>
+      <%= link_to persona.name, persona_path(persona) %>
+      <% if persona.description.present? %>
+        : <%= persona.description %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
