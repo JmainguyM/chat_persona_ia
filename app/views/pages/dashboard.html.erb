@@ -1,0 +1,154 @@
+<% content_for :title, "Dashboard · fabulae" %>
+
+<%# Données d'exemple en dur : à remplacer par current_user.conversations / current_user.personas / Persona.all quand les modèles existeront %>
+<% conversations = [] %>
+<% my_personas = [] %>
+<% available_personas = [
+  ["Sherlock Holmes", "A sharp detective who notices every detail and loves a good mystery.", "sherlock.jpg"],
+  ["Albert Einstein", "Curious and playful, he explains the universe with simple thought experiments.", "einstein.jpg"],
+  ["Marie Curie", "Determined and precise, a pioneer who turns every question into an experiment.", "marie-curie.jpg"]
+] %>
+<% display_name = @user.username.presence || @user.email.split("@").first %>
+
+<div class="dash">
+  <div class="container">
+
+    <%# EN-TÊTE %>
+    <header class="dash-head">
+      <div class="dash-avatar" aria-hidden="true"><%= display_name.first.upcase %></div>
+      <div class="dash-head-text">
+        <p class="home-eyebrow mb-1">Dashboard</p>
+        <h1 class="dash-title">Hello, <%= display_name %></h1>
+        <p class="dash-lead">Your conversations, your personas and your account, all in one place.</p>
+      </div>
+      <%= link_to "#explore", class: "home-btn home-btn-dark dash-head-cta" do %>
+        Start a chat <span aria-hidden="true">→</span>
+      <% end %>
+    </header>
+
+    <%# NAVIGATION INTERNE %>
+    <nav class="dash-tabs" aria-label="Dashboard sections">
+      <a href="#conversations">Conversations <span class="dash-count"><%= conversations.size %></span></a>
+      <a href="#my-personas">My personas <span class="dash-count"><%= my_personas.size %></span></a>
+      <a href="#explore">Explore <span class="dash-count"><%= available_personas.size %></span></a>
+      <a href="#settings">Settings</a>
+    </nav>
+
+    <%# MES CONVERSATIONS %>
+    <section class="dash-section" id="conversations">
+      <div class="dash-section-head">
+        <h2 class="dash-h2">My conversations</h2>
+      </div>
+
+      <% if conversations.any? %>
+        <%# TODO: une ligne par conversation (avatar du persona, dernier message, date) %>
+      <% else %>
+        <div class="dash-empty">
+          <div class="dash-empty-icon" aria-hidden="true">💬</div>
+          <h3>No conversations yet</h3>
+          <p>Pick a persona below and ask your first question.</p>
+          <%= link_to "Explore personas", "#explore", class: "home-btn dash-btn-ghost" %>
+        </div>
+      <% end %>
+    </section>
+
+    <%# MES PERSONAS %>
+    <section class="dash-section" id="my-personas">
+      <div class="dash-section-head">
+        <h2 class="dash-h2">My personas</h2>
+        <p class="dash-section-sub">Characters you created.</p>
+      </div>
+
+      <div class="dash-grid">
+        <%# TODO: afficher current_user.personas ici %>
+        <%# TODO: lier vers new_persona_path quand la route existera %>
+        <div class="dash-create">
+          <span class="dash-create-plus" aria-hidden="true">+</span>
+          <h3>Create a persona</h3>
+          <p>Give it a name, a personality and a way of speaking.</p>
+          <span class="dash-soon">Coming soon</span>
+        </div>
+      </div>
+    </section>
+
+    <%# PERSONAS DISPONIBLES %>
+    <section class="dash-section" id="explore">
+      <div class="dash-section-head">
+        <h2 class="dash-h2">Available personas</h2>
+        <p class="dash-section-sub">Start a conversation with one of them.</p>
+      </div>
+
+      <div class="dash-grid">
+        <% available_personas.each do |name, description, image| %>
+          <article class="dash-persona">
+            <%= image_tag image, alt: name, class: "dash-persona-img", loading: "lazy" %>
+            <div class="dash-persona-body">
+              <h3><%= name %></h3>
+              <p><%= description %></p>
+              <%# TODO: lier vers la création d'une conversation avec ce persona %>
+              <%= link_to "#", class: "dash-persona-link" do %>
+                Chat <span aria-hidden="true">→</span>
+              <% end %>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    </section>
+
+    <%# PARAMÈTRES DU COMPTE %>
+    <section class="dash-section" id="settings">
+      <div class="dash-section-head">
+        <h2 class="dash-h2">Settings</h2>
+        <p class="dash-section-sub">Update your account details.</p>
+      </div>
+
+      <div class="dash-settings">
+        <div class="dash-card">
+          <h3 class="dash-card-title">Account</h3>
+
+          <%= simple_form_for(@user, as: :user, url: user_registration_path, html: { method: :put }) do |f| %>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <%= f.input :username, required: true, input_html: { autocomplete: "username" } %>
+              </div>
+              <div class="col-md-6">
+                <%= f.input :email, required: true, input_html: { autocomplete: "email" } %>
+              </div>
+              <div class="col-md-6">
+                <%= f.input :password,
+                            label: "New password",
+                            hint: "Leave it blank to keep your current password",
+                            required: false,
+                            input_html: { autocomplete: "new-password" } %>
+              </div>
+              <div class="col-md-6">
+                <%= f.input :password_confirmation,
+                            label: "Confirm new password",
+                            required: false,
+                            input_html: { autocomplete: "new-password" } %>
+              </div>
+              <div class="col-12">
+                <%= f.input :current_password,
+                            hint: "Required to save your changes",
+                            required: true,
+                            input_html: { autocomplete: "current-password" } %>
+              </div>
+            </div>
+
+            <%= f.button :submit, "Save changes", class: "home-btn home-btn-dark dash-submit" %>
+          <% end %>
+        </div>
+
+        <div class="dash-card dash-card-danger">
+          <h3 class="dash-card-title">Delete account</h3>
+          <p>This permanently deletes your account, your conversations and your personas.</p>
+          <%= button_to "Delete my account", user_registration_path,
+                        method: :delete,
+                        class: "home-btn dash-btn-danger",
+                        form: { data: { turbo_confirm: "Delete your account for good?" } } %>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</div>

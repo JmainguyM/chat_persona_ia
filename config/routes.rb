@@ -1,6 +1,11 @@
 Rails.application.routes.draw do
   devise_for :users
   root to: "pages#home"
+
+  # Dashboard de l'utilisateur connecté.
+  # "user_root" est la route où Devise redirige après login, sign up et modification du compte.
+  get "dashboard", to: "pages#dashboard", as: :dashboard
+  get "dashboard", to: "pages#dashboard", as: :user_root
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.
