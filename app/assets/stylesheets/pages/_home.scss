@@ -1,1 +1,747 @@
 // Specific CSS for your home-page
+.home {
+  background: $home-bg;
+  color: $home-ink;
+  font-family: $home-font;
+
+  h1, h2, h3 { color: $home-ink; }
+}
+
+// Typo
+.home-eyebrow {
+  color: $home-garnet;
+  font-size: 0.72rem;
+  font-weight: 780;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.home-title {
+  font-size: clamp(2.6rem, 6vw, 4rem);
+  font-weight: 690;
+  letter-spacing: -0.068em;
+  line-height: 0.94;
+  margin-bottom: 24px;
+}
+
+.home-h2 {
+  font-size: clamp(2rem, 4vw, 2.9rem);
+  font-weight: 660;
+  letter-spacing: -0.055em;
+  line-height: 1;
+  margin-bottom: 16px;
+}
+
+.home-lead {
+  color: $home-muted;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  max-width: 520px;
+  margin-bottom: 28px;
+}
+
+// Hero
+.home-hero {
+  padding: 96px 0 88px;
+  overflow-x: clip;
+}
+
+.home-checks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 28px 0 0;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: $home-muted;
+
+  li::before {
+    content: "✓";
+    color: $home-garnet;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+}
+
+.home-visual {
+  position: relative;
+  max-width: 460px;
+  margin: 0 0 0 auto;
+  padding: 0 0 36px 24px;
+}
+
+// Carte fantôme derrière le chat pour donner de la profondeur
+.home-chat-ghost {
+  position: absolute;
+  inset: 24px -18px 60px 48px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at 80% 20%, rgba($home-garnet, 0.45), transparent 55%),
+    $home-plum;
+  transform: rotate(6deg);
+}
+
+.home-chat {
+  position: relative;
+  background: #fff;
+  border: 1px solid $home-line;
+  border-radius: 28px;
+  box-shadow: 0 30px 60px -20px rgba(32, 29, 31, 0.3);
+  overflow: hidden;
+  transform: rotate(-1.5deg);
+}
+
+.home-chat-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  border-bottom: 1px solid $home-line;
+}
+
+.home-chat-avatar {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    object-fit: cover;
+    object-position: top;
+  }
+}
+
+.home-chat-online {
+  position: absolute;
+  right: -3px;
+  bottom: -3px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #2ecc71;
+  border: 2px solid #fff;
+}
+
+.home-chat-who {
+  flex: 1;
+  min-width: 0;
+
+  strong { display: block; font-weight: 680; letter-spacing: -0.02em; }
+  span { font-size: 0.78rem; color: $home-muted; }
+}
+
+.home-chat-menu {
+  color: $home-muted;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+}
+
+.home-chat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 18px 20px 20px;
+  background: $home-rose;
+}
+
+.home-chat-day {
+  align-self: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.8);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: $home-muted;
+}
+
+.home-msg {
+  max-width: 82%;
+  padding: 11px 15px 8px;
+  border-radius: 18px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+
+  time {
+    display: block;
+    margin-top: 2px;
+    text-align: right;
+    font-size: 0.66rem;
+    opacity: 0.55;
+  }
+}
+
+.home-msg-user {
+  align-self: flex-end;
+  background: $home-ink;
+  color: #fff;
+  border-bottom-right-radius: 6px;
+}
+
+.home-msg-ai {
+  align-self: flex-start;
+  background: #fff;
+  border: 1px solid $home-line;
+  border-bottom-left-radius: 6px;
+}
+
+// Indicateur "en train d'écrire"
+.home-typing {
+  align-self: flex-start;
+  display: flex;
+  gap: 4px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  border-bottom-left-radius: 6px;
+  background: #fff;
+  border: 1px solid $home-line;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $home-muted;
+    animation: home-typing 1.2s infinite ease-in-out;
+
+    &:nth-child(2) { animation-delay: 0.15s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+  }
+}
+
+@keyframes home-typing {
+  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+.home-chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 4px;
+
+  span {
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px dashed rgba($home-garnet, 0.45);
+    font-size: 0.76rem;
+    font-weight: 560;
+    color: $home-ink;
+  }
+}
+
+.home-chat-input {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 12px;
+  padding: 6px 6px 6px 16px;
+  border: 1px solid $home-line;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  color: $home-muted;
+}
+
+.home-chat-send {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: $home-garnet;
+  color: #fff;
+  font-weight: 700;
+}
+
+// Badge flottant "autres personas en ligne"
+.home-chat-float {
+  position: absolute;
+  left: -8px;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 10px 10px;
+  border-radius: 18px;
+  background: #fff;
+  border: 1px solid $home-line;
+  box-shadow: 0 18px 40px -18px rgba(32, 29, 31, 0.35);
+  font-size: 0.76rem;
+  line-height: 1.35;
+  color: $home-muted;
+  transform: rotate(-3deg);
+
+  strong { color: $home-ink; font-weight: 640; }
+}
+
+.home-avatars {
+  display: flex;
+
+  img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: top;
+    border: 2px solid #fff;
+
+    & + img { margin-left: -10px; }
+  }
+}
+
+// Sections
+.home-section {
+  padding: 96px 0;
+}
+
+.home-section-rose { background: $home-rose; }
+.home-section-cream { background: $home-cream; }
+
+.home-heading {
+  position: relative;
+  margin-bottom: 48px;
+
+  .home-lead { margin-bottom: 0; }
+}
+
+.home-bignum {
+  position: absolute;
+  top: -70px;
+  left: -12px;
+  font-size: 7.6rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.06em;
+  color: rgba($home-garnet, 0.08);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.text-center .home-bignum {
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.home-heading > *:not(.home-bignum) {
+  position: relative;
+  z-index: 1;
+}
+
+// Étapes : cartes claires avec une mini illustration
+.home-step {
+  height: 100%;
+  padding: 14px 14px 26px;
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid $home-line;
+  box-shadow: 0 20px 40px -30px rgba(32, 29, 31, 0.3);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 50px -30px rgba(32, 29, 31, 0.4);
+  }
+
+  h3 {
+    margin: 0 12px 6px;
+    font-size: 1.25rem;
+    font-weight: 680;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0 12px;
+    color: $home-muted;
+    font-size: 0.92rem;
+    line-height: 1.55;
+  }
+}
+
+.home-step-visual {
+  display: grid;
+  place-items: center;
+  height: 170px;
+  margin-bottom: 22px;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 85% 15%, rgba($home-garnet, 0.12), transparent 55%),
+    $home-rose;
+  overflow: hidden;
+}
+
+.home-step-num {
+  display: inline-block;
+  margin: 0 12px 10px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: rgba($home-garnet, 0.08);
+  color: $home-garnet;
+  font-size: 0.68rem;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+// Mini formulaire (étape 1)
+.home-mini-form {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 70%;
+  padding: 12px;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 12px 24px -16px rgba(32, 29, 31, 0.35);
+  transform: rotate(-3deg);
+}
+
+.home-mini-field {
+  padding: 6px 10px;
+  border: 1px solid $home-line;
+  border-radius: 8px;
+  color: $home-muted;
+  font-size: 0.72rem;
+}
+
+.home-mini-submit {
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: $home-ink;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: center;
+}
+
+// Mini sélection d'avatars (étape 2)
+.home-mini-pick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  img {
+    width: 62px;
+    height: 80px;
+    border-radius: 12px;
+    object-fit: cover;
+    object-position: top;
+    opacity: 0.55;
+    filter: grayscale(0.6);
+  }
+
+  img.is-on {
+    width: 76px;
+    height: 98px;
+    opacity: 1;
+    filter: none;
+    outline: 3px solid $home-garnet;
+    outline-offset: 3px;
+  }
+}
+
+// Mini conversation (étape 3)
+.home-mini-chat {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 78%;
+}
+
+.home-mini-bubble {
+  align-self: flex-start;
+  max-width: 85%;
+  padding: 8px 12px;
+  border-radius: 14px;
+  border-bottom-left-radius: 4px;
+  background: #fff;
+  border: 1px solid $home-line;
+  font-size: 0.74rem;
+  line-height: 1.4;
+
+  &.is-user {
+    align-self: flex-end;
+    background: $home-ink;
+    border-color: $home-ink;
+    color: #fff;
+    border-radius: 14px;
+    border-bottom-right-radius: 4px;
+  }
+}
+
+// Cartes personas : éventail entrecroisé sur desktop
+.home-deck {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.home-persona {
+  position: relative;
+  aspect-ratio: 3 / 4;
+  border-radius: 24px;
+  overflow: hidden;
+  background: $home-plum;
+  box-shadow: 0 24px 50px -24px rgba(32, 29, 31, 0.45);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.35s ease;
+}
+
+@media (min-width: 992px) {
+  .home-deck {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0 40px;
+  }
+
+  .home-deck .home-persona {
+    width: 340px;
+    flex-shrink: 0;
+    border: 6px solid #fff;
+
+    & + .home-persona { margin-left: -70px; }
+
+    &:nth-child(1) { transform: rotate(-7deg) translateY(28px); z-index: 1; }
+    &:nth-child(2) { transform: translateY(-8px); z-index: 2; }
+    &:nth-child(3) { transform: rotate(7deg) translateY(28px); z-index: 1; }
+
+    // Le texte des cartes de côté reste hors de la zone recouverte
+    &:nth-child(1) .home-persona-info { padding-right: 90px; }
+    &:nth-child(3) .home-persona-info { padding-left: 90px; }
+    &:nth-child(3) .home-persona-num { right: auto; left: 18px; }
+
+    // La carte survolée passe devant et se redresse
+    &:hover {
+      transform: rotate(0) translateY(-20px) scale(1.04);
+      z-index: 3;
+      box-shadow: 0 40px 70px -24px rgba(32, 29, 31, 0.55);
+    }
+  }
+}
+
+.home-persona-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.home-persona-num {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.35);
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.68rem;
+  font-weight: 760;
+}
+
+.home-persona-info {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 90px 22px 22px;
+  background: linear-gradient(to top, rgba(20, 12, 18, 0.94), transparent);
+
+  h3 {
+    color: #fff;
+    font-size: 1.35rem;
+    font-weight: 680;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+  }
+
+  p {
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 0.85rem;
+    margin-bottom: 14px;
+  }
+}
+
+.home-persona-link {
+  display: inline-flex;
+  gap: 8px;
+  color: #fff;
+  font-weight: 680;
+  font-size: 0.9rem;
+  text-decoration: none;
+
+  &:hover { color: #fff; }
+}
+
+// Création
+.home-dots {
+  margin: 24px 0 32px;
+
+  li {
+    color: $home-muted;
+    font-size: 0.95rem;
+    margin-bottom: 10px;
+
+    &::before {
+      content: "";
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: $home-garnet;
+      margin-right: 12px;
+      vertical-align: middle;
+    }
+  }
+}
+
+// Carte "builder" de la section 3 : les tags rangés par catégorie
+.home-builder {
+  max-width: 480px;
+  margin-left: auto;
+  padding: 24px;
+  border-radius: 24px;
+  background: #fff;
+  border: 1px solid $home-line;
+  box-shadow: 0 30px 60px -30px rgba(32, 29, 31, 0.3);
+}
+
+.home-builder-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 18px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid $home-line;
+
+  strong { display: block; font-weight: 680; letter-spacing: -0.02em; }
+}
+
+.home-builder-avatar {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  border: 1.5px dashed rgba($home-garnet, 0.5);
+  color: $home-garnet;
+  font-size: 1.3rem;
+}
+
+.home-builder-draft {
+  margin-left: auto;
+  padding: 3px 8px;
+  border-radius: 6px;
+  background: $home-cream;
+  color: $home-muted;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.home-builder-label {
+  display: block;
+  margin-bottom: 8px;
+  color: $home-muted;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.home-builder-head .home-builder-label { margin-bottom: 2px; }
+
+.home-builder-group + .home-builder-group { margin-top: 16px; }
+
+// Tags descriptifs (non cliquables) : petits, plats, sans contraste fort
+.home-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+
+  span {
+    padding: 4px 10px;
+    border-radius: 6px;
+    background: rgba($home-garnet, 0.06);
+    color: $home-muted;
+    font-size: 0.82rem;
+    font-weight: 500;
+    cursor: default;
+    user-select: none;
+
+    &::before {
+      content: "#";
+      color: $home-garnet;
+      margin-right: 2px;
+    }
+  }
+
+  // Tag sélectionné dans l'aperçu
+  span.is-on {
+    background: rgba($home-garnet, 0.14);
+    color: $home-ink;
+    font-weight: 600;
+  }
+}
+
+.home-builder-preview {
+  margin: 20px 0 0;
+  padding: 14px 16px;
+  border-radius: 14px;
+  background: $home-rose;
+  color: $home-ink;
+  font-size: 0.9rem;
+  font-style: italic;
+}
+
+// FAQ (accordion Bootstrap épuré)
+.home-faq {
+  max-width: 760px;
+
+  .accordion-item {
+    background: transparent;
+    border-bottom: 1px solid $home-line;
+  }
+
+  .accordion-button {
+    background: transparent;
+    color: $home-ink;
+    font-family: $home-font;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    padding: 22px 0;
+    box-shadow: none;
+  }
+
+  .accordion-button:not(.collapsed) { color: $home-ink; }
+
+  .accordion-body {
+    color: $home-muted;
+    padding: 0 0 22px;
+  }
+}
+
+// CTA final
+.home-cta {
+  margin: 40px 0 0;
+  padding: 110px 0;
+  background: $home-ink;
+  color: #fff;
+
+  .home-h2 { color: #fff; }
+  .home-lead { color: rgba(255, 255, 255, 0.7); }
+}
+
+@media (max-width: 991px) {
+  // Plus de marge sur les côtés en petit format (Bootstrap ne met que 12px)
+  .home .container { padding-left: 24px; padding-right: 24px; }
+  .home-bignum { left: 0; }
+  .home-hero { padding-top: 56px; }
+  .home-visual { margin: 48px auto 0; } // espace entre le texte et le chat quand ils s'empilent
+  .home-builder { margin: 24px auto 0; }
+  .home-section { padding: 72px 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-typing span { animation: none; }
+  .home-persona { transition: none; }
+}
