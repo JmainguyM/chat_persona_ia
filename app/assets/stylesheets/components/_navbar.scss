@@ -58,7 +58,7 @@
 }
 
 // Burger : 2 traits -> croix
-.fab-toggler {
+.fab-navbar .fab-toggler {
   position: relative;
   width: 40px;
   height: 40px;
@@ -92,32 +92,48 @@
   .fab-navbar .container { padding-left: 24px; padding-right: 24px; }
 }
 
-// Menu mobile : liste avec séparateurs + boutons en bas
+// Menu mobile : liens en liste, puis les 2 boutons côte à côte en bas.
+// Sélecteurs préfixés par .fab-navbar pour passer devant ceux de Bootstrap.
 @media (max-width: 767px) {
   .fab-navbar .navbar-collapse { margin-top: 12px; }
 
-  .fab-nav .fab-link {
+  .fab-navbar .fab-nav { margin: 0; }
+
+  .fab-navbar .fab-nav .fab-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     padding: 14px 0;
     border-top: 1px solid $home-line;
     color: $home-ink;
     font-size: 1.05rem;
     font-weight: 600;
+
+    &::after { content: "→"; color: $home-muted; transition: transform 0.15s ease; }
+    &:hover, &:focus { color: $home-garnet; }
+    &:hover::after { transform: translateX(3px); color: $home-garnet; }
   }
 
-  .fab-auth {
-    flex-wrap: wrap;
+  .fab-navbar .fab-auth {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
     margin: 0;
     padding: 16px 0 8px;
     border-top: 1px solid $home-line;
 
-    .fab-btn { flex: 1; }
+    .fab-btn { width: 100%; padding: 12px 16px; }
+    .fab-btn:hover { transform: none; }
   }
 
-  .fab-user {
-    flex-basis: 100%;
+  // Connecté : nom de l'utilisateur puis "Log out" sur toute la largeur
+  .fab-navbar .fab-user {
+    grid-column: 1 / -1;
     color: $home-muted;
     font-weight: 500;
   }
+
+  .fab-navbar .fab-user + .fab-btn { grid-column: 1 / -1; }
 }
 
 @media (prefers-reduced-motion: reduce) {

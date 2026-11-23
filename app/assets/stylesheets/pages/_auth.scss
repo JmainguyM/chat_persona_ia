@@ -1,0 +1,164 @@
+// Pages Devise (login, sign up, mot de passe, compte) dans le style de la homepage
+.auth {
+  min-height: calc(100vh - 72px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 72px 16px;
+  background: $home-bg;
+  color: $home-ink;
+  font-family: $home-font;
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 420px;
+  padding: 40px 36px;
+  background: #fff;
+  border: 1px solid $home-line;
+  border-radius: 24px;
+  box-shadow: 0 18px 50px rgba($home-plum, 0.06);
+
+  @media (max-width: 480px) { padding: 32px 22px; }
+}
+
+.auth-title {
+  font-family: $home-font;
+  color: $home-ink;
+  font-size: 2rem;
+  font-weight: 680;
+  letter-spacing: -0.05em;
+  line-height: 1.05;
+  margin-bottom: 8px;
+}
+
+.auth-subtitle {
+  color: $home-muted;
+  font-size: 0.95rem;
+  margin-bottom: 28px;
+}
+
+.auth-section-title {
+  font-family: $home-font;
+  color: $home-ink;
+  font-size: 1.1rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  margin: 36px 0 6px;
+  padding-top: 28px;
+  border-top: 1px solid $home-line;
+}
+
+// Champs simple_form / bootstrap
+.auth {
+  .form-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .form-control {
+    padding: 12px 14px;
+    border: 1px solid $home-line;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    background: $home-bg;
+
+    &:focus {
+      border-color: $home-garnet;
+      box-shadow: 0 0 0 3px rgba($home-garnet, 0.12);
+      background: #fff;
+    }
+  }
+
+  .form-text { color: $home-muted; font-size: 0.78rem; }
+
+  .form-check-input:checked {
+    background-color: $home-garnet;
+    border-color: $home-garnet;
+  }
+
+  .form-check-label { font-size: 0.88rem; color: $home-muted; }
+
+  .alert { border-radius: 12px; font-size: 0.88rem; }
+}
+
+// Bouton plein largeur. Sélecteurs renforcés car le .btn de Bootstrap
+// rend le fond transparent au hover / focus / clic.
+.auth .auth-submit {
+  width: 100%;
+  justify-content: center;
+  margin-top: 8px;
+  border: 1px solid transparent;
+  transform: none;
+
+  &.home-btn-dark,
+  &.home-btn-dark:hover,
+  &.home-btn-dark:focus,
+  &.home-btn-dark:active {
+    background: $home-ink;
+    color: #fff;
+    border-color: $home-ink;
+  }
+
+  &.home-btn-dark:hover { background: $home-plum; border-color: $home-plum; }
+
+  &:focus-visible { box-shadow: 0 0 0 3px rgba($home-garnet, 0.25); }
+}
+
+.auth .auth-danger {
+  &,
+  &:focus,
+  &:active {
+    background: transparent;
+    color: $home-garnet;
+    border-color: rgba($home-garnet, 0.35);
+  }
+
+  &:hover { color: $home-garnet; background: rgba($home-garnet, 0.06); border-color: $home-garnet; }
+}
+
+.auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  // simple_form ajoute un mb-3 (!important) sur le wrapper de la checkbox
+  > fieldset, .form-check { margin-bottom: 0 !important; }
+}
+
+.auth-small-link {
+  margin-left: auto;
+  color: $home-muted;
+  font-size: 0.85rem;
+  font-weight: 500;
+  text-decoration: none;
+
+  &:hover { color: $home-garnet; }
+}
+
+// Bas de carte : une phrase grise + lien grenat, sous un séparateur
+.auth-links {
+  margin-top: 28px;
+  padding-top: 22px;
+  border-top: 1px solid $home-line;
+  text-align: center;
+  font-size: 0.9rem;
+  color: $home-muted;
+
+  &:empty { display: none; }
+
+  p { margin: 0; }
+  p + p { margin-top: 8px; }
+
+  a {
+    color: $home-garnet;
+    font-weight: 600;
+    text-decoration: none;
+    margin-left: 2px;
+
+    &:hover { text-decoration: underline; text-underline-offset: 3px; }
+  }
+}
