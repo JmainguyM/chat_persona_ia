@@ -3,7 +3,8 @@ module PersonasHelper
   DEFAULT_AVATARS = {
     "Sherlock Holmes" => "sherlock.jpg",
     "Albert Einstein" => "einstein.jpg",
-    "Marie Curie" => "marie-curie.jpg"
+    "Marie Curie" => "marie-curie.jpg",
+    "Jean-Claude Van Damme" => "J-C.jpg"
   }.freeze
 
   # Avatar d'un persona : photo uploadée, sinon avatar_url, sinon l'image par défaut, sinon les initiales
