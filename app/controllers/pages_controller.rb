@@ -2,6 +2,10 @@ class PagesController < ApplicationController
   skip_before_action :authenticate_user!, only: :home
 
   def home
+    # Après login / sign up depuis la homepage, Devise envoie sur la page Explore
+    store_location_for(:user, personas_path) unless user_signed_in?
+    # Ordre des seeds (Sherlock, Einstein, Curie) : celui du milieu est mis en avant
+    @featured_personas = Persona.built_in.order(:created_at).limit(3)
   end
 
   def dashboard
