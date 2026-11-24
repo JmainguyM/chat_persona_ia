@@ -47,4 +47,33 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
     get chat_path(chat)
     assert_response :not_found
   end
+
+  test "delete a conversation from the dashboard" do
+    chat = @user.chats.create!(persona: @persona)
+    chat.messages.create!(role: "user", content: "Hello")
+
+    get dashboard_path
+    assert_select "form[action='#{chat_path(chat)}'] button.chat-delete"
+
+    assert_difference(["Chat.count", "Message.count"], -1) { delete chat_path(chat) }
+    assert_redirected_to dashboard_path(anchor: "conversations")
+  end
+
+  test "cannot delete someone else's conversation" do
+    other = User.create!(email: "other@example.com", password: "password123", username: "other")
+    chat = other.chats.create!(persona: @persona)
+
+    assert_no_difference("Chat.count") { delete chat_path(chat) }
+    assert_response :not_found
+  end
+
+  test "delete a conversation from its own page" do
+    chat = @user.chats.create!(persona: @persona)
+
+    get chat_path(chat)
+    assert_select ".chat-head form[action='#{chat_path(chat)}'] button.chat-delete"
+
+    assert_difference("Chat.count", -1) { delete chat_path(chat) }
+    assert_redirected_to dashboard_path(anchor: "conversations")
+  end
 end

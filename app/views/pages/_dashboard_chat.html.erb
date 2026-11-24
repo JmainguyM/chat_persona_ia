@@ -1,10 +1,11 @@
-<%# Une conversation du dashboard : avatar du persona, dernier message, date %>
+<%# Une conversation du dashboard : avatar du persona, dernier message, date, suppression.
+    Un clic sur la ligne ouvre la conversation (stretched-link sur le nom) %>
 <% last_message = chat.messages.last %>
-<%= link_to chat_path(chat), class: "dash-chat" do %>
+<article class="dash-chat">
   <%= persona_avatar(chat.persona, css_class: "dash-chat-img") %>
   <div class="dash-chat-body">
     <div class="dash-chat-head">
-      <h3><%= chat.persona.name %></h3>
+      <h3><%= link_to chat.persona.name, chat_path(chat), class: "dash-chat-link stretched-link" %></h3>
       <time datetime="<%= chat.updated_at.iso8601 %>"><%= time_ago_in_words(chat.updated_at) %> ago</time>
     </div>
     <p>
@@ -12,4 +13,5 @@
       <%= truncate(last_message.content, length: 140) %>
     </p>
   </div>
-<% end %>
+  <%= render "chats/delete_button", chat: chat %>
+</article>
