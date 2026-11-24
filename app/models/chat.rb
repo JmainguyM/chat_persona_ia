@@ -31,7 +31,7 @@ class Chat < ApplicationRecord
   def refresh_suggestions!
     # L'IA répond un message par ligne
     text = new_llm.with_instructions(suggestions_instructions).ask(recent_messages_as_text).content
-    list = text.lines.map(&:strip).reject(&:blank?)
+    list = text.lines.map { |line| clean_suggestion(line) }.reject(&:blank?)
     update!(suggestions: list.first(SUGGESTIONS_COUNT))
   rescue RubyLLM::Error => e
     Rails.logger.warn("Suggestions failed for chat #{id}: #{e.message}")
@@ -57,8 +57,20 @@ class Chat < ApplicationRecord
 
       Always write the suggestions in English, whatever the language of the conversation.
       Answer with exactly #{SUGGESTIONS_COUNT} lines, one message per line,
-      no numbering, no quotes, nothing else.
+      no numbering, no quotes, no speaker label (never start with "User:"), nothing else.
     PROMPT
+  end
+
+  # L'IA imite parfois le format de la conversation ("User: ...") ou ajoute
+  # une numérotation / des guillemets : on retire tout ça.
+  def clean_suggestion(line)
+    labels = ["User", "You", "Me", persona.name].map { |label| Regexp.escape(label) }.join("|")
+    line.strip
+        .sub(/\A(\d+[.)]|[-*•])\s*/, "")              # "1. " / "- "
+        .delete_prefix('"').delete_suffix('"')
+        .sub(/\A\**(#{labels})\**\s*:\s*/i, "")       # "User: " / "**Einstein**: "
+        .delete_prefix('"').delete_suffix('"')
+        .strip
   end
 
   # Les 12 derniers messages en texte, un par paragraphe : "User: ..." / "Einstein: ..."
