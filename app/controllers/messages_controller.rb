@@ -7,6 +7,7 @@ class MessagesController < ApplicationController
 
     if @message.save
       @chat.reply_to(@message)
+      @chat.refresh_suggestions!
       redirect_to chat_path(@chat)
     else
       render "chats/show", status: :unprocessable_entity

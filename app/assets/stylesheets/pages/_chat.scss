@@ -140,6 +140,34 @@
   border-top: 1px solid $home-line;
 }
 
+// Propositions de messages, au-dessus du champ de saisie
+.chat-suggestions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.chat-suggestion {
+  padding: 7px 14px;
+  border: 1px solid $home-line;
+  border-radius: 999px;
+  background: $home-rose;
+  color: $home-ink;
+  font-family: $home-font;
+  font-size: 0.85rem;
+  line-height: 1.35;
+  text-align: left;
+  transition: border-color 0.2s ease, color 0.2s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: $home-garnet;
+    color: $home-garnet;
+    outline: none;
+  }
+}
+
 .chat-form {
   display: flex;
   align-items: flex-end;

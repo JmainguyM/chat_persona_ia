@@ -30,14 +30,29 @@
       </section>
 
       <%# FORMULAIRE D'ENVOI %>
-      <section class="chat-composer" aria-label="New message">
+      <section class="chat-composer" aria-label="New message" data-controller="suggestions">
+
+        <%# PROPOSITIONS DE MESSAGES : un clic remplit le champ %>
+        <% if @chat.suggestions.any? %>
+          <div class="chat-suggestions" aria-label="Suggested messages">
+            <% @chat.suggestions.each do |suggestion| %>
+              <button type="button"
+                      class="chat-suggestion"
+                      data-action="suggestions#use"
+                      data-suggestion="<%= suggestion %>">
+                <%= suggestion %>
+              </button>
+            <% end %>
+          </div>
+        <% end %>
+
         <%= simple_form_for [@chat, @message], html: { class: "chat-form" } do |f| %>
           <%= f.input :content,
                       as: :text,
                       label: "Your message",
                       label_html: { class: "visually-hidden" },
                       placeholder: "Ask #{@chat.persona.name} anything…",
-                      input_html: { rows: 2 } %>
+                      input_html: { rows: 2, data: { suggestions_target: "input" } } %>
           <%= f.button :submit, "Send", class: "home-btn chat-submit" %>
         <% end %>
       </section>
