@@ -42,4 +42,34 @@ class PersonasControllerTest < ActionDispatch::IntegrationTest
     get edit_persona_path(@persona)
     assert_response :not_found
   end
+
+  test "built-in personas cannot be edited or deleted, even by their owner" do
+    sherlock = @user.personas.create!(name: "Sherlock Holmes", system_prompt: "You are Sherlock.", built_in: true)
+
+    get edit_persona_path(sherlock)
+    assert_response :not_found
+
+    # Une réponse 404 réinitialise la session Devise en test : on se reconnecte avant chaque requête
+    sign_in @user
+    patch persona_path(sherlock), params: { persona: { name: "Hacked" } }
+    assert_response :not_found
+    assert_equal "Sherlock Holmes", sherlock.reload.name
+
+    sign_in @user
+    assert_no_difference("Persona.count") { delete persona_path(sherlock) }
+    assert_response :not_found
+  end
+
+  test "built_in cannot be set through the form" do
+    post personas_path, params: { persona: { name: "Fake", system_prompt: "You are fake.", built_in: true } }
+    assert_not Persona.find_by!(name: "Fake").built_in?
+  end
+
+  test "dashboard lists built-in personas in Explore without an Edit link" do
+    @user.personas.create!(name: "Sherlock Holmes", system_prompt: "You are Sherlock.", built_in: true)
+    get dashboard_path
+    assert_select "#my-personas h3", text: "Sherlock Holmes", count: 0
+    assert_select "#explore h3", text: "Sherlock Holmes"
+    assert_select "#explore .dash-persona-edit", count: 0
+  end
 end
