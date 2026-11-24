@@ -1,7 +1,69 @@
-<%= simple_form_for persona do |f| %>
-  <%= f.input :name %>
-  <%= f.input :description %>
-  <%= f.input :system_prompt %>
-  <%= f.input :avatar_url %>
-  <%= f.button :submit %>
-<% end %>
+<%# Formulaire de création / édition d'un persona, avec aperçu en direct (persona_preview_controller.js) %>
+
+<div class="persona-editor" data-controller="persona-preview">
+  <div class="dash-card persona-form-card">
+    <%= simple_form_for persona do |f| %>
+      <%= f.error_notification %>
+
+      <%= f.input :name,
+                  label: "Name",
+                  placeholder: "e.g. Ada Lovelace",
+                  hint: "Who are you talking to? A real person, a fictional character or your own creation.",
+                  input_html: { autofocus: persona.new_record?,
+                                data: { persona_preview_target: "nameInput", action: "input->persona-preview#update" } } %>
+
+      <%= f.input :description,
+                  label: "Short description",
+                  placeholder: "e.g. Mathematician and first computer programmer, curious and precise.",
+                  hint: "One or two sentences shown on the persona card.",
+                  input_html: { rows: 2,
+                                data: { persona_preview_target: "descriptionInput", action: "input->persona-preview#update" } } %>
+
+      <%= f.input :system_prompt,
+                  label: "Personality & instructions",
+                  placeholder: "You are Ada Lovelace. You speak with Victorian elegance, you love explaining mathematics with simple images, and you stay in character…",
+                  hint: "Tell the AI who it is, how it speaks and what it should or shouldn't do. Written in the second person (\"You are…\").",
+                  input_html: { rows: 8, data: { persona_preview_target: "promptInput" } } %>
+
+      <div class="persona-starters">
+        <span class="persona-starters-label">Need inspiration?</span>
+        <% {
+             "Historical figure" => "You are [name], the [role] from [era]. You speak as they did, share your knowledge and memories in the first person, and stay in character. If asked about events after your lifetime, react with curiosity rather than knowledge.",
+             "Coach" => "You are a warm and demanding coach. You ask one question at a time, help the user set concrete goals, and end each answer with a small next step.",
+             "Fictional character" => "You are [name] from [story]. You keep their personality, vocabulary and quirks. You never mention that you are an AI and you answer in short, lively replies."
+           }.each do |label, prompt| %>
+          <button type="button" class="persona-starter"
+                  data-action="persona-preview#useStarter"
+                  data-prompt="<%= prompt %>"><%= label %></button>
+        <% end %>
+      </div>
+
+      <%= f.input :avatar_url,
+                  label: "Avatar URL",
+                  placeholder: "https://…",
+                  hint: "Optional. A link to an image; initials are used otherwise.",
+                  input_html: { data: { persona_preview_target: "avatarInput", action: "input->persona-preview#update" } } %>
+
+      <div class="persona-form-actions">
+        <%= link_to "Cancel", dashboard_path(anchor: "my-personas"), class: "home-btn dash-btn-ghost" %>
+        <%= f.button :submit, persona.new_record? ? "Create persona" : "Save changes", class: "home-btn home-btn-dark dash-submit" %>
+      </div>
+    <% end %>
+  </div>
+
+  <aside class="persona-preview" aria-label="Card preview">
+    <p class="home-eyebrow mb-2">Preview</p>
+    <article class="dash-persona">
+      <div data-persona-preview-target="avatar">
+        <%= persona_avatar(persona.name.present? ? persona : Persona.new(name: "?"), css_class: "dash-persona-img") %>
+      </div>
+      <div class="dash-persona-body">
+        <h3 data-persona-preview-target="name"><%= persona.name.presence || "Your persona" %></h3>
+        <p data-persona-preview-target="description"><%= persona.description.presence || "Its short description will appear here." %></p>
+        <div class="dash-persona-actions">
+          <span class="dash-persona-link">Chat <span aria-hidden="true">→</span></span>
+        </div>
+      </div>
+    </article>
+  </aside>
+</div>
