@@ -541,9 +541,18 @@
   font-weight: 760;
 }
 
+// Pas de position : la zone cliquable (stretched-link) du bouton couvre alors toute la carte.
+// La carte est en flex pour garder le texte en bas.
+.home-persona {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  isolation: isolate;
+}
+
+.home-persona-img { z-index: -1; }
+
 .home-persona-info {
-  position: absolute;
-  inset: auto 0 0 0;
   padding: 90px 22px 22px;
   background: linear-gradient(to top, rgba(20, 12, 18, 0.94), transparent);
 
@@ -563,6 +572,10 @@
 }
 
 .home-persona-link {
+  cursor: pointer;
+  padding: 0;
+  border: 0;
+  background: none;
   display: inline-flex;
   gap: 8px;
   color: #fff;

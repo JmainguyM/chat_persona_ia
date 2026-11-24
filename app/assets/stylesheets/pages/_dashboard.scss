@@ -235,6 +235,7 @@ a.dash-create {
 
 // Carte persona
 .dash-persona {
+  position: relative;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -243,7 +244,8 @@ a.dash-create {
   border-radius: 24px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 
-  &:hover {
+  &:hover,
+  &:focus-within {
     transform: translateY(-3px);
     box-shadow: 0 18px 40px -20px rgba($home-plum, 0.35);
   }
@@ -286,7 +288,10 @@ a.dash-create {
   gap: 12px;
 }
 
+// Au-dessus de la zone cliquable de la carte
 .dash-persona-edit {
+  position: relative;
+  z-index: 2;
   color: $home-muted;
   font-size: 0.85rem;
   font-weight: 600;
@@ -295,10 +300,12 @@ a.dash-create {
   &:hover { color: $home-ink; }
 }
 
-// Le bouton "Chat" est un button_to (POST) : on retire le style de bouton
-.dash-persona-chat { margin: 0; }
+// Le bouton "Chat" est un button_to (POST) : on retire le style de bouton.
+// Il porte la classe stretched-link (Bootstrap) : toute la carte est cliquable.
+.persona-chat-form { margin: 0; }
 
 .dash-persona-link {
+  cursor: pointer;
   padding: 0;
   border: 0;
   background: none;

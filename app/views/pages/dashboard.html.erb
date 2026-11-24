@@ -60,7 +60,7 @@
           <p>Give it a name, a personality and a way of speaking.</p>
         <% end %>
 
-        <%= render partial: "dashboard_persona", collection: @my_personas, as: :persona, locals: { owned: true } %>
+        <%= render partial: "personas/card", collection: @my_personas, as: :persona %>
       </div>
     </section>
 
@@ -73,7 +73,7 @@
 
       <% if @available_personas.any? %>
         <div class="dash-grid">
-          <%= render partial: "dashboard_persona", collection: @available_personas, as: :persona, locals: { owned: false } %>
+          <%= render partial: "personas/card", collection: @available_personas, as: :persona %>
         </div>
       <% else %>
         <div class="dash-empty">
