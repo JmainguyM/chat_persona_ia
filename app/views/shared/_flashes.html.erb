@@ -1,12 +1,22 @@
-<% if notice %>
-  <div class="alert alert-info alert-dismissible fade show m-1" role="alert">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    <%= notice %>
-  </div>
-<% end %>
-<% if alert %>
-  <div class="alert alert-warning alert-dismissible fade show m-1" role="alert">
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    <%= alert %>
+<%# Notifications flottantes (flash). Disparaissent seules (barre de progression, en pause au survol)
+    ou avec la croix. data-turbo-temporary : pas de réaffichage au retour arrière %>
+<% flashes = { notice: notice, alert: alert }.compact_blank %>
+<% if flashes.any? %>
+  <div class="flash-stack" data-turbo-temporary>
+    <% flashes.each do |type, message| %>
+      <div class="flash flash-<%= type %>"
+           role="<%= type == :alert ? "alert" : "status" %>"
+           data-controller="flash"
+           data-action="animationend->flash#dismissAfterProgress">
+        <span class="flash-icon" aria-hidden="true">
+          <i class="fa-solid <%= type == :alert ? "fa-exclamation" : "fa-check" %>"></i>
+        </span>
+        <p class="flash-message"><%= message %></p>
+        <button type="button" class="flash-close" data-action="flash#dismiss" aria-label="Dismiss notification">
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
+        <span class="flash-progress" aria-hidden="true"></span>
+      </div>
+    <% end %>
   </div>
 <% end %>
