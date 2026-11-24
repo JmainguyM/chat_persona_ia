@@ -10,7 +10,7 @@
 <h2>System prompt</h2>
 <%= simple_format @persona.system_prompt %>
 
-<% if @persona.user == current_user %>
+<% if @persona.editable_by?(current_user) %>
   <%= link_to "Edit", edit_persona_path(@persona) %> |
   <%= link_to "Delete", persona_path(@persona), data: { turbo_method: :delete, turbo_confirm: "Delete this persona?" } %> |
 <% end %>

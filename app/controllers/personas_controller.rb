@@ -40,8 +40,9 @@ class PersonasController < ApplicationController
 
   private
 
+  # Seuls les personas créés par l'utilisateur sont modifiables (jamais les personas de base)
   def set_persona
-    @persona = current_user.personas.find(params[:id])
+    @persona = current_user.personas.custom.find(params[:id])
   end
 
   def persona_params
