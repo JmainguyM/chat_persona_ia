@@ -1,14 +1,41 @@
-<h1>My personas</h1>
+<% content_for :title, "Personas · fabulae" %>
 
-<%= link_to "New persona", new_persona_path %>
+<div class="dash">
+  <div class="container">
+    <header class="persona-page-head">
+      <p class="home-eyebrow mb-1">Explore</p>
+      <h1 class="dash-title">Who do you want to talk to?</h1>
+      <p class="dash-lead">
+        Pick a persona and start a conversation.
+        <% unless user_signed_in? %>
+          <%= link_to "Create a free account", new_user_registration_path, class: "personas-inline-link" %> to chat.
+        <% end %>
+      </p>
+    </header>
 
-<ul>
-  <% @personas.each do |persona| %>
-    <li>
-      <%= link_to persona.name, persona_path(persona) %>
-      <% if persona.description.present? %>
-        : <%= persona.description %>
-      <% end %>
-    </li>
-  <% end %>
-</ul>
+    <section class="dash-section" id="featured">
+      <div class="dash-section-head">
+        <h2 class="dash-h2">Featured</h2>
+        <p class="dash-section-sub">The personas that come with fabulae.</p>
+      </div>
+      <div class="dash-grid">
+        <%= render partial: "card", collection: @built_in_personas, as: :persona %>
+      </div>
+    </section>
+
+    <section class="dash-section" id="community">
+      <div class="dash-section-head">
+        <h2 class="dash-h2">Community</h2>
+        <p class="dash-section-sub">Personas created by fabulae users.</p>
+      </div>
+      <div class="dash-grid">
+        <%= link_to new_persona_path, class: "dash-create" do %>
+          <span class="dash-create-plus" aria-hidden="true">+</span>
+          <h3>Create a persona</h3>
+          <p>Give it a name, a personality and a way of speaking.</p>
+        <% end %>
+        <%= render partial: "card", collection: @community_personas, as: :persona %>
+      </div>
+    </section>
+  </div>
+</div>

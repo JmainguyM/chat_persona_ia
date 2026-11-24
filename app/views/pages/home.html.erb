@@ -1,6 +1,5 @@
 <%# app/views/pages/home.html.erb %>
-<%# TODO: pointer vers personas_path / new_persona_path quand les routes existeront %>
-<% cta_path = user_signed_in? ? "#personas" : new_user_registration_path %>
+<%# La page Explore est publique ; il faut un compte pour chatter ou créer un persona (Devise redirige vers le login) %>
 
 <div class="home">
 
@@ -13,9 +12,9 @@
           <h1 class="home-title">Chat with AI characters</h1>
           <p class="home-lead">
             Pick a persona, ask your questions and get answers in their own style.
-            Soon, create your own in a few clicks.
+            Or create your own in a few clicks.
           </p>
-          <%= link_to cta_path, class: "home-btn home-btn-dark" do %>
+          <%= link_to personas_path, class: "home-btn home-btn-dark" do %>
             Start chatting <span aria-hidden="true">→</span>
           <% end %>
           <ul class="home-checks list-unstyled">
@@ -162,7 +161,7 @@
             <div class="home-persona-info">
               <h3><%= name %></h3>
               <p><%= description %></p>
-              <%= link_to cta_path, class: "home-persona-link" do %>
+              <%= link_to personas_path, class: "home-persona-link" do %>
                 Chat <span aria-hidden="true">→</span>
               <% end %>
             </div>
@@ -188,7 +187,7 @@
             <li>A personality and a reply style</li>
             <li>An avatar to recognize it</li>
           </ul>
-          <%= link_to cta_path, class: "home-btn home-btn-dark" do %>
+          <%= link_to new_persona_path, class: "home-btn home-btn-dark" do %>
             Create a persona <span aria-hidden="true">→</span>
           <% end %>
         </div>
@@ -260,7 +259,7 @@
       <p class="home-eyebrow">Join the conversation</p>
       <h2 class="home-h2">Your first character is waiting</h2>
       <p class="home-lead mx-auto">Pick a persona and ask your first question.</p>
-      <%= link_to cta_path, class: "home-btn home-btn-white" do %>
+      <%= link_to personas_path, class: "home-btn home-btn-white" do %>
         Start chatting <span aria-hidden="true">→</span>
       <% end %>
     </div>

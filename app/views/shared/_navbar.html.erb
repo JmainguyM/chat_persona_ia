@@ -13,7 +13,7 @@
     <div class="collapse navbar-collapse" id="fabNavbar">
       <ul class="navbar-nav ms-md-auto fab-nav">
         <li class="nav-item">
-          <%= link_to "Personas", root_path(anchor: "personas"), class: "nav-link fab-link" %>
+          <%= link_to "Personas", personas_path, class: "nav-link fab-link" %>
         </li>
         <% if user_signed_in? %>
           <li class="nav-item">

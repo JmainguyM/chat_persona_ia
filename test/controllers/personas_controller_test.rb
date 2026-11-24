@@ -72,4 +72,38 @@ class PersonasControllerTest < ActionDispatch::IntegrationTest
     assert_select "#explore h3", text: "Sherlock Holmes"
     assert_select "#explore .dash-persona-edit", count: 0
   end
+
+  test "explore page is public and asks visitors to log in to chat" do
+    sign_out @user
+    @user.personas.create!(name: "Sherlock Holmes", system_prompt: "You are Sherlock.", built_in: true)
+
+    get personas_path
+    assert_response :success
+    assert_select "#featured h3", text: "Sherlock Holmes"
+    assert_select "#community h3", text: "Ada Lovelace"
+    assert_select "a[href='#{new_user_session_path}']", text: /Log in to chat/
+    assert_select "form[action^='/personas/'][action$='/chats']", count: 0
+  end
+
+  test "visitors come back to the explore page after logging in" do
+    sign_out @user
+    get personas_path
+    post user_session_path, params: { user: { email: @user.email, password: "password123" } }
+    assert_redirected_to personas_path
+  end
+
+  test "signed-in users can start a chat from the explore page, and edit only their own personas" do
+    @other.personas.create!(name: "Coach", system_prompt: "You are a coach.")
+
+    get personas_path
+    assert_select "form[action='#{persona_chats_path(@persona)}'] button", text: /Chat/
+    assert_select ".dash-persona-edit", count: 1
+    assert_select "a.dash-persona-edit[href='#{edit_persona_path(@persona)}']"
+  end
+
+  test "creating a persona requires an account" do
+    sign_out @user
+    get new_persona_path
+    assert_redirected_to new_user_session_path
+  end
 end
