@@ -79,3 +79,12 @@
 @media (max-width: 991px) {
   .persona-danger { max-width: none; }
 }
+
+// Page Explore (personas#index) : lien dans le texte d'intro
+.personas-inline-link {
+  color: $home-garnet;
+  font-weight: 600;
+  text-decoration: none;
+
+  &:hover { color: $home-garnet; text-decoration: underline; text-underline-offset: 3px; }
+}

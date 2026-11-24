@@ -1,12 +1,14 @@
 class PersonasController < ApplicationController
+  # La liste est publique ; il faut un compte pour chatter ou créer un persona
+  skip_before_action :authenticate_user!, only: :index
   before_action :set_persona, only: %i[edit update destroy]
 
   def index
-    @personas = Persona.all
-  end
+    # Après login / sign up depuis cette page, Devise ramène ici
+    store_location_for(:user, personas_path) unless user_signed_in?
 
-  def show
-    @persona = Persona.find(params[:id])
+    @built_in_personas = Persona.built_in.order(:name)
+    @community_personas = Persona.custom.order(created_at: :desc)
   end
 
   def new

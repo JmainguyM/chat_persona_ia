@@ -1,0 +1,24 @@
+<%# Carte persona de la page Explore. Il faut un compte pour chatter : sinon, le bouton mène au login %>
+<article class="dash-persona">
+  <%= persona_avatar(persona, css_class: "dash-persona-img") %>
+  <div class="dash-persona-body">
+    <h3><%= persona.name %></h3>
+    <% if persona.description.present? %>
+      <p><%= persona.description %></p>
+    <% end %>
+    <div class="dash-persona-actions">
+      <% if user_signed_in? %>
+        <%= button_to persona_chats_path(persona), class: "dash-persona-link", form_class: "dash-persona-chat" do %>
+          Chat <span aria-hidden="true">→</span>
+        <% end %>
+        <% if persona.editable_by?(current_user) %>
+          <%= link_to "Edit", edit_persona_path(persona), class: "dash-persona-edit" %>
+        <% end %>
+      <% else %>
+        <%= link_to new_user_session_path, class: "dash-persona-link" do %>
+          Log in to chat <span aria-hidden="true">→</span>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</article>
