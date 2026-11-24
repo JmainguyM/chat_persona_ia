@@ -1,17 +1,17 @@
-# Resets the database on every `bin/rails db:seed`: everything is deleted, then recreated.
+# Seeds
+#
+# Development: resets the database (everything is deleted), then recreates a demo user,
+# the built-in personas and a demo chat.
+#
+# Production: deletes nothing and creates only the built-in personas that don't exist yet.
+# A persona needs an owner, so the personas are attached to an EXISTING user given by
+# PERSONAS_OWNER_EMAIL (no user is created in production):
+#
+#   heroku run PERSONAS_OWNER_EMAIL=you@example.com rails db:seed
+#
+# Can be run several times: a built-in persona that already exists (same name) is skipped.
 
-puts "Cleaning the database..."
-Persona.destroy_all
-User.destroy_all
-
-puts "Creating demo user..."
-admin = User.create!(
-  email: "admin@chatpersona.dev",
-  username: "admin",
-  password: "password"
-)
-
-personas = [
+PERSONAS = [
   {
     name: "Sherlock Holmes",
     description: "The famous consulting detective of 221B Baker Street. A peerless observer and master of deduction.",
@@ -45,22 +45,52 @@ personas = [
       Always stay in character.
     PROMPT
   }
-]
+].freeze
 
-puts "Creating personas..."
-personas.each do |attrs|
-  admin.personas.create!(attrs.merge(built_in: true))
+# Creates the built-in personas that don't exist yet. Never updates or deletes anything.
+def seed_built_in_personas(owner)
+  PERSONAS.each do |attrs|
+    persona = Persona.built_in.find_or_create_by!(name: attrs[:name]) do |p|
+      p.assign_attributes(attrs.merge(user: owner))
+    end
+    puts persona.previously_new_record? ? "  created: #{persona.name}" : "  already exists: #{persona.name}"
+  end
 end
 
-puts "Creating demo chat..."
-sherlock = admin.personas.find_by!(name: "Sherlock Holmes")
-chat = admin.chats.create!(persona: sherlock, title: "Chat with #{sherlock.name}")
+if Rails.env.production?
+  owner_email = ENV.fetch("PERSONAS_OWNER_EMAIL") do
+    abort "PERSONAS_OWNER_EMAIL is missing: give the email of an existing user to own the built-in personas."
+  end
+  owner = User.find_by(email: owner_email) || abort("No user with email #{owner_email}: create the account first.")
 
-chat.messages.create!(role: "user", content: "Good evening, Mr Holmes. Can you tell anything about me?")
-chat.messages.create!(
-  role: "assistant",
-  content: "You have been typing late into the night, judging by the hour of your message. A programmer, I deduce."
-)
+  puts "Creating built-in personas (production, nothing is deleted)..."
+  seed_built_in_personas(owner)
+  puts "Done: #{Persona.built_in.count} built-in persona(s) in the database."
+else
+  puts "Cleaning the database..."
+  Persona.destroy_all
+  User.destroy_all
 
-puts "Done: #{Persona.count} persona(s) in the database."
-puts "Demo chat ready: http://localhost:3000/chats/#{chat.id}"
+  puts "Creating demo user..."
+  admin = User.create!(
+    email: "admin@chatpersona.dev",
+    username: "admin",
+    password: "password"
+  )
+
+  puts "Creating personas..."
+  seed_built_in_personas(admin)
+
+  puts "Creating demo chat..."
+  sherlock = admin.personas.find_by!(name: "Sherlock Holmes")
+  chat = admin.chats.create!(persona: sherlock, title: "Chat with #{sherlock.name}")
+
+  chat.messages.create!(role: "user", content: "Good evening, Mr Holmes. Can you tell anything about me?")
+  chat.messages.create!(
+    role: "assistant",
+    content: "You have been typing late into the night, judging by the hour of your message. A programmer, I deduce."
+  )
+
+  puts "Done: #{Persona.count} persona(s) in the database."
+  puts "Demo chat ready: http://localhost:3000/chats/#{chat.id}"
+end
