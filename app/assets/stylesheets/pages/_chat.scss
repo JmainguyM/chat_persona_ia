@@ -83,6 +83,70 @@
   background: $home-rose;
 }
 
+// Liste des messages (les nouveaux sont ajoutés en direct par Turbo Streams)
+.chat-message-list {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 14px;
+}
+
+// Message d'invitation : seulement tant qu'il n'y a ni message ni persona en train d'écrire
+.chat-message-list:has(.chat-message) .chat-empty,
+.chat-messages:has(.chat-typing) .chat-empty { display: none; }
+
+// Ancre du défilement automatique : laisse la place au formulaire collé en bas
+#typing { scroll-margin-bottom: 160px; }
+
+// "Sherlock is typing…"
+.chat-typing {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: 1px solid $home-line;
+  border-radius: 20px;
+  border-bottom-left-radius: 6px;
+  background: #fff;
+  color: $home-muted;
+  font-size: 0.85rem;
+}
+
+.chat-typing-dots {
+  display: inline-flex;
+  gap: 4px;
+
+  span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: $home-garnet;
+    animation: chat-typing 1.2s infinite ease-in-out;
+
+    &:nth-child(2) { animation-delay: 0.15s; }
+    &:nth-child(3) { animation-delay: 0.3s; }
+  }
+}
+
+@keyframes chat-typing {
+  0%, 60%, 100% { opacity: 0.25; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chat-typing-dots span { animation: none; opacity: 0.6; }
+}
+
+.chat-reply-error {
+  display: inline-block;
+  padding: 10px 16px;
+  border: 1px solid rgba($home-garnet, 0.3);
+  border-radius: 14px;
+  background: #fff;
+  color: $home-garnet;
+  font-size: 0.85rem;
+}
+
 .chat-empty {
   margin: auto;
   padding: 10px 18px;
@@ -203,6 +267,12 @@
 }
 
 // Sélecteur renforcé car le .btn de Bootstrap rend le fond transparent au hover
+// Pas d'envoi pendant que le persona écrit (le serveur refuse aussi, voir MessagesController)
+.chat-card:has(.chat-typing) .chat-submit {
+  opacity: 0.45;
+  pointer-events: none;
+}
+
 .chat .chat-submit {
   flex-shrink: 0;
   padding: 10px 20px;

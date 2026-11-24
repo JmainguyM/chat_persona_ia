@@ -1,0 +1,6 @@
+<%# Le persona est en train d'écrire. Remplacé par sa réponse dès qu'elle arrive.
+    chat-typing (Stimulus) recharge la page si la réponse tarde, au cas où le direct aurait été manqué %>
+<div class="chat-typing" role="status" data-controller="chat-typing">
+  <span class="chat-typing-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+  <%= persona.name %> is typing…
+</div>

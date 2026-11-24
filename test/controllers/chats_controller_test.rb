@@ -2,6 +2,7 @@ require "test_helper"
 
 class ChatsControllerTest < ActionDispatch::IntegrationTest
   include Devise::Test::IntegrationHelpers
+  include ActiveJob::TestHelper
 
   setup do
     @user = User.create!(email: "chatter@example.com", password: "password123", username: "chatter")
@@ -75,5 +76,16 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
 
     assert_difference("Chat.count", -1) { delete chat_path(chat) }
     assert_redirected_to dashboard_path(anchor: "conversations")
+  end
+
+  test "starting a chat opens the page right away and greets in the background" do
+    assert_enqueued_with(job: ChatStartJob) { post persona_chats_path(@persona) }
+    chat = @user.chats.last
+    assert_redirected_to chat_path(chat)
+    assert_empty chat.messages, "the greeting is not generated during the request"
+
+    get chat_path(chat)
+    assert_select "turbo-cable-stream-source"
+    assert_select "#typing .chat-typing", text: /Ada Lovelace is typing/
   end
 end
