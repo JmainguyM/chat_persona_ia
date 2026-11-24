@@ -7,8 +7,7 @@
       <p><%= persona.description %></p>
     <% end %>
     <div class="dash-persona-actions">
-      <%# TODO: lier vers la création d'une conversation quand le modèle Conversation existera %>
-      <%= link_to persona_path(persona), class: "dash-persona-link" do %>
+      <%= button_to persona_chats_path(persona), class: "dash-persona-link", form_class: "dash-persona-chat" do %>
         Chat <span aria-hidden="true">→</span>
       <% end %>
       <% if owned %>

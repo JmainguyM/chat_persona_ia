@@ -1,0 +1,15 @@
+<%# Une conversation du dashboard : avatar du persona, dernier message, date %>
+<% last_message = chat.messages.last %>
+<%= link_to chat_path(chat), class: "dash-chat" do %>
+  <%= persona_avatar(chat.persona, css_class: "dash-chat-img") %>
+  <div class="dash-chat-body">
+    <div class="dash-chat-head">
+      <h3><%= chat.persona.name %></h3>
+      <time datetime="<%= chat.updated_at.iso8601 %>"><%= time_ago_in_words(chat.updated_at) %> ago</time>
+    </div>
+    <p>
+      <% if last_message.role == "user" %><span class="dash-chat-you">You:</span><% end %>
+      <%= truncate(last_message.content, length: 140) %>
+    </p>
+  </div>
+<% end %>

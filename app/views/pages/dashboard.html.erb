@@ -1,7 +1,5 @@
 <% content_for :title, "Dashboard · fabulae" %>
 
-<%# TODO: remplacer par current_user.conversations quand le modèle Conversation existera %>
-<% conversations = [] %>
 <% display_name = @user.username.presence || @user.email.split("@").first %>
 
 <div class="dash">
@@ -22,7 +20,7 @@
 
     <%# NAVIGATION INTERNE %>
     <nav class="dash-tabs" aria-label="Dashboard sections">
-      <a href="#conversations">Conversations <span class="dash-count"><%= conversations.size %></span></a>
+      <a href="#conversations">Conversations <span class="dash-count"><%= @chats.size %></span></a>
       <a href="#my-personas">My personas <span class="dash-count"><%= @my_personas.size %></span></a>
       <a href="#explore">Explore <span class="dash-count"><%= @available_personas.size %></span></a>
       <a href="#settings">Settings</a>
@@ -34,8 +32,10 @@
         <h2 class="dash-h2">My conversations</h2>
       </div>
 
-      <% if conversations.any? %>
-        <%# TODO: une ligne par conversation (avatar du persona, dernier message, date) %>
+      <% if @chats.any? %>
+        <div class="dash-chats">
+          <%= render partial: "dashboard_chat", collection: @chats, as: :chat %>
+        </div>
       <% else %>
         <div class="dash-empty">
           <div class="dash-empty-icon" aria-hidden="true">💬</div>
