@@ -1,4 +1,6 @@
 class Chat < ApplicationRecord
+  SUGGESTIONS_COUNT = 3
+
   belongs_to :user
   belongs_to :persona
   has_many :messages, -> { order(:created_at) }, dependent: :destroy
@@ -23,7 +25,50 @@ class Chat < ApplicationRecord
     messages.create!(role: "assistant", content: response.content)
   end
 
+  # Demande à l'IA quelques messages que l'utilisateur pourrait envoyer ensuite,
+  # selon l'état de la conversation, et les enregistre.
+  # Un échec ici ne doit jamais casser le chat : on vide simplement la liste.
+  def refresh_suggestions!
+    # L'IA répond un message par ligne
+    text = new_llm.with_instructions(suggestions_instructions).ask(recent_messages_as_text).content
+    list = text.lines.map(&:strip).reject(&:blank?)
+    update!(suggestions: list.first(SUGGESTIONS_COUNT))
+  rescue RubyLLM::Error => e
+    Rails.logger.warn("Suggestions failed for chat #{id}: #{e.message}")
+    update!(suggestions: [])
+  end
+
   private
+
+  def suggestions_instructions
+    <<~PROMPT
+      You help a user chat with a character called "#{persona.name}".
+      Character description: #{persona.description.presence || 'none'}.
+      Character instructions: #{persona.system_prompt}
+
+      Propose exactly #{SUGGESTIONS_COUNT} short messages (max 20 words each) that the USER
+      could send next. Write them in the user's voice, addressed to #{persona.name}.
+
+      They must build on what has already been said and move the conversation forward.
+      Never repeat a question that was already asked. Make them varied:
+      1. one that digs deeper into the last thing #{persona.name} said,
+      2. one that opens a new but related angle,
+      3. one that is more personal, playful or challenging.
+
+      Always write the suggestions in English, whatever the language of the conversation.
+      Answer with exactly #{SUGGESTIONS_COUNT} lines, one message per line,
+      no numbering, no quotes, nothing else.
+    PROMPT
+  end
+
+  # Les 12 derniers messages en texte, un par paragraphe : "User: ..." / "Einstein: ..."
+  def recent_messages_as_text
+    messages.last(12).map { |message| "#{author_name(message)}: #{message.content}" }.join("\n\n")
+  end
+
+  def author_name(message)
+    message.role == "user" ? "User" : persona.name
+  end
 
   # Nouvelle conversation IA qui utilise explicitement la clé OPENAI_API_KEY (chargée depuis .env).
   # ENV.fetch lève une erreur claire si la clé est absente.

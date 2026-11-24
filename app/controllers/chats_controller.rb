@@ -8,6 +8,7 @@ class ChatsController < ApplicationController
     persona = Persona.find(params[:persona_id])
     chat = current_user.chats.create!(persona: persona, title: "Chat with #{persona.name}")
     chat.greet!
+    chat.refresh_suggestions!
     redirect_to chat_path(chat)
   end
 end
