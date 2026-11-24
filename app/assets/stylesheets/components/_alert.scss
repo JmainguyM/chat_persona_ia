@@ -1,6 +1,116 @@
-.alert {
+// Notifications flottantes (flash), en bas à droite. Voir shared/_flashes et flash_controller.js
+$flash-duration: 5s;
+
+.flash-stack {
   position: fixed;
-  bottom: 16px;
-  right: 16px;
-  z-index: 1000;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1080;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 380px;
+  max-width: calc(100vw - 32px);
+  pointer-events: none;
+
+  @media (max-width: 575px) {
+    right: 16px;
+    bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.flash {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px 14px 16px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid $home-line;
+  border-radius: 16px;
+  box-shadow: 0 18px 40px -16px rgba($home-plum, 0.35), 0 2px 6px rgba($home-plum, 0.06);
+  color: $home-ink;
+  font-family: $home-font;
+  pointer-events: auto;
+  animation: flash-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  &.flash-leaving { animation: flash-out 0.25s ease-in forwards; }
+}
+
+.flash-icon {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  font-size: 0.8rem;
+}
+
+.flash-notice .flash-icon { background: rgba($home-plum, 0.1); color: $home-plum; }
+.flash-alert .flash-icon { background: rgba($home-garnet, 0.12); color: $home-garnet; }
+
+.flash-message {
+  flex: 1;
+  margin: 4px 0 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.flash-close {
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: none;
+  color: $home-muted;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover { background: $home-rose; color: $home-ink; }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba($home-garnet, 0.25); }
+}
+
+// Temps restant avant fermeture ; en pause tant que la souris ou le focus est sur la notification
+.flash-progress {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 3px;
+  width: 100%;
+  transform-origin: left;
+  animation: flash-progress $flash-duration linear forwards;
+
+  .flash-notice & { background: $home-plum; }
+  .flash-alert & { background: $home-garnet; }
+
+  .flash:hover &,
+  .flash:focus-within & { animation-play-state: paused; }
+}
+
+// Les erreurs restent un peu plus longtemps
+.flash-alert .flash-progress { animation-duration: $flash-duration * 1.6; }
+
+@keyframes flash-in {
+  from { opacity: 0; transform: translateY(12px) scale(0.97); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes flash-out {
+  to { opacity: 0; transform: translateX(24px); }
+}
+
+@keyframes flash-progress {
+  from { transform: scaleX(1); }
+  to { transform: scaleX(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flash,
+  .flash.flash-leaving { animation: none; }
 }
