@@ -29,6 +29,8 @@ class PersonasController < ApplicationController
 
   def update
     if @persona.update(persona_params)
+      # Une URL a remplacé la photo : on supprime l'ancienne photo de Cloudinary
+      @persona.photo.purge_later if @persona.avatar_url.present? && persona_params[:photo].blank?
       redirect_to dashboard_path(anchor: "my-personas"), notice: "#{@persona.name} updated."
     else
       render :edit, status: :unprocessable_entity
@@ -48,6 +50,6 @@ class PersonasController < ApplicationController
   end
 
   def persona_params
-    params.require(:persona).permit(:name, :description, :system_prompt, :avatar_url)
+    params.require(:persona).permit(:name, :description, :system_prompt, :avatar_url, :photo)
   end
 end
