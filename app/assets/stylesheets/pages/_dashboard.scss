@@ -138,7 +138,9 @@
   border-radius: 24px;
 }
 
+// Toute la ligne est cliquable (stretched-link sur le nom), le bouton de suppression passe au-dessus
 .dash-chat {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 16px;
@@ -149,8 +151,8 @@
 
   & + & { border-top: 1px solid $home-line; }
 
-  &:hover { background: $home-rose; color: $home-ink; }
-  &:focus-visible { outline: none; background: $home-rose; box-shadow: inset 3px 0 0 $home-garnet; }
+  &:hover,
+  &:focus-within { background: $home-rose; }
 }
 
 .dash-chat-img {
@@ -190,6 +192,15 @@
 }
 
 .dash-chat-you { color: $home-ink; font-weight: 600; }
+
+.dash-chat-link {
+  color: $home-ink;
+  text-decoration: none;
+
+  &:hover { color: $home-ink; }
+  &:focus-visible { outline: none; }
+  &:focus-visible::after { box-shadow: inset 3px 0 0 $home-garnet; }
+}
 
 // Carte "créer un persona"
 .dash-create {

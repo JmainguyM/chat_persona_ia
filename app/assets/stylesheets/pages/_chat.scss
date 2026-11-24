@@ -54,6 +54,9 @@
 
 .chat-persona-text { min-width: 0; }
 
+// Bouton de suppression calé à droite de l'en-tête
+.chat-head .chat-delete-form { margin-left: auto; }
+
 .chat-title {
   margin: 0 0 2px;
   font-size: 1.15rem;
