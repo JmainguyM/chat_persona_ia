@@ -85,17 +85,7 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  # Heroku provides a single database via DATABASE_URL and doesn't allow creating others.
-  # Solid Cache, Solid Queue and Solid Cable therefore share the primary database.
-  primary: &primary_production
-    <<: *default
-    url: <%= ENV["DATABASE_URL"] %>
-  cache:
-    <<: *primary_production
-    migrations_paths: db/cache_migrate
-  queue:
-    <<: *primary_production
-    migrations_paths: db/queue_migrate
-  cable:
-    <<: *primary_production
-    migrations_paths: db/cable_migrate
+  # Heroku provides a single database via DATABASE_URL. Solid Cache, Solid Queue and
+  # Solid Cable tables are created by regular migrations in db/migrate.
+  <<: *default
+  url: <%= ENV["DATABASE_URL"] %>
