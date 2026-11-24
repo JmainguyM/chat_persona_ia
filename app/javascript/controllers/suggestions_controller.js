@@ -11,4 +11,9 @@ export default class extends Controller {
     input.focus()
     input.setSelectionRange(input.value.length, input.value.length)
   }
+
+  // Vide le champ une fois le message envoyé (la page n'est plus rechargée)
+  reset(event) {
+    if (event.detail.success) this.inputTarget.value = ""
+  }
 }

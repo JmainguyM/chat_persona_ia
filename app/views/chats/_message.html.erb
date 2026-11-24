@@ -1,5 +1,5 @@
 <%# Un message de la conversation. role "user" = l'utilisateur, "assistant" = la persona %>
-<article class="chat-message chat-message-<%= message.role %>">
+<article id="<%= dom_id(message) %>" class="chat-message chat-message-<%= message.role %>">
   <header class="chat-message-head">
     <span class="chat-message-author">
       <%= message.role == "user" ? "You" : persona.name %>

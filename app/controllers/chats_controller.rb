@@ -28,8 +28,8 @@ class ChatsController < ApplicationController
 
   def start_chat_with(persona)
     chat = current_user.chats.create!(persona: persona, title: "Chat with #{persona.name}")
-    chat.greet!
-    chat.refresh_suggestions!
+    # Accueil et suggestions en arrière-plan : la page du chat s'ouvre tout de suite
+    ChatStartJob.perform_later(chat)
     chat
   end
 end

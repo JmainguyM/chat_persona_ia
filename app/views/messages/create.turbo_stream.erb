@@ -1,0 +1,5 @@
+<%# Réponse immédiate à l'envoi d'un message. Le même contenu arrive aussi par le direct (Message#broadcast_to_chat) :
+    Turbo ignore le doublon grâce à l'id du message. Ceci couvre le cas où le direct n'est pas encore connecté. %>
+<%= turbo_stream.append "messages", partial: "chats/message", locals: { message: @message, persona: @chat.persona } %>
+<%= turbo_stream.update "typing", partial: "chats/typing", locals: { persona: @chat.persona } %>
+<%= turbo_stream.update "suggestions", "" %>
