@@ -1,0 +1,28 @@
+// Bouton corbeille pour supprimer une conversation (dashboard et page du chat)
+.chat-delete-form {
+  // Au-dessus de la zone cliquable de la ligne du dashboard (stretched-link)
+  position: relative;
+  z-index: 2;
+  margin: 0;
+}
+
+.chat-delete {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: none;
+  color: $home-muted;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    color: $home-garnet;
+    background: #fff;
+    border-color: rgba($home-garnet, 0.3);
+  }
+}

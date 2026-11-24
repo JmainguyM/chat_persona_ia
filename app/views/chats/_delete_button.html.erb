@@ -1,0 +1,8 @@
+<%# Bouton de suppression d'une conversation (dashboard et page du chat), avec confirmation %>
+<%= button_to chat_path(chat), method: :delete,
+              class: "chat-delete", form_class: "chat-delete-form",
+              title: "Delete conversation",
+              aria: { label: "Delete conversation with #{chat.persona.name}" },
+              form: { data: { turbo_confirm: "Delete this conversation with #{chat.persona.name}? This can't be undone." } } do %>
+  <i class="fa-regular fa-trash-can" aria-hidden="true"></i>
+<% end %>

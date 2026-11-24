@@ -16,6 +16,7 @@
             <p class="chat-persona-desc"><%= @chat.persona.description %></p>
           <% end %>
         </div>
+        <%= render "chats/delete_button", chat: @chat %>
       </header>
 
       <%# MESSAGES %>

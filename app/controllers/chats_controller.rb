@@ -12,6 +12,13 @@ class ChatsController < ApplicationController
     redirect_to chat_path(chat)
   end
 
+  def destroy
+    chat = current_user.chats.find(params[:id])
+    chat.destroy
+    redirect_to dashboard_path(anchor: "conversations"),
+                notice: "Conversation with #{chat.persona.name} deleted.", status: :see_other
+  end
+
   private
 
   def unstarted_chat_with(persona)
