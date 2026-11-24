@@ -49,7 +49,7 @@ personas = [
 
 puts "Creating personas..."
 personas.each do |attrs|
-  admin.personas.create!(attrs)
+  admin.personas.create!(attrs.merge(built_in: true))
 end
 
 puts "Creating demo chat..."
