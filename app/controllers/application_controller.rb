@@ -9,6 +9,11 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Où Devise redirige après login, sign up et modification du compte.
+  def signed_in_root_path(_resource)
+    dashboard_path
+  end
+
   def configure_permitted_parameters
     # For additional fields in app/views/devise/registrations/new.html.erb
     devise_parameter_sanitizer.permit(:sign_up, keys: [:username])
