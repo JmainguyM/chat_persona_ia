@@ -16,7 +16,7 @@ class PersonasController < ApplicationController
   def create
     @persona = current_user.personas.new(persona_params)
     if @persona.save
-      redirect_to @persona, notice: "Persona created."
+      redirect_to dashboard_path(anchor: "my-personas"), notice: "#{@persona.name} is ready to chat."
     else
       render :new, status: :unprocessable_entity
     end
@@ -27,7 +27,7 @@ class PersonasController < ApplicationController
 
   def update
     if @persona.update(persona_params)
-      redirect_to @persona, notice: "Persona updated."
+      redirect_to dashboard_path(anchor: "my-personas"), notice: "#{@persona.name} updated."
     else
       render :edit, status: :unprocessable_entity
     end
@@ -35,7 +35,7 @@ class PersonasController < ApplicationController
 
   def destroy
     @persona.destroy
-    redirect_to personas_path, notice: "Persona deleted.", status: :see_other
+    redirect_to dashboard_path(anchor: "my-personas"), notice: "Persona deleted.", status: :see_other
   end
 
   private

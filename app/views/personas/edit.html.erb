@@ -1,5 +1,23 @@
-<h1>Edit <%= @persona.name %></h1>
+<% saved_name = @persona.attribute_in_database(:name) %>
+<% content_for :title, "Edit #{saved_name} · fabulae" %>
 
-<%= render "form", persona: @persona %>
+<div class="dash">
+  <div class="container">
+    <header class="persona-page-head">
+      <p class="home-eyebrow mb-1">Edit persona</p>
+      <h1 class="dash-title"><%= saved_name %></h1>
+      <p class="dash-lead">Changes apply to the next messages of every conversation with this persona.</p>
+    </header>
 
-<%= link_to "Back", persona_path(@persona) %>
+    <%= render "form", persona: @persona %>
+
+    <div class="dash-card dash-card-danger persona-danger">
+      <h3 class="dash-card-title">Delete this persona</h3>
+      <p>This permanently deletes the persona and all its conversations.</p>
+      <%= button_to "Delete persona", persona_path(@persona),
+                    method: :delete,
+                    class: "home-btn dash-btn-danger",
+                    form: { data: { turbo_confirm: "Delete #{saved_name} for good?" } } %>
+    </div>
+  </div>
+</div>

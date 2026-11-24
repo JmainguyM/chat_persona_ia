@@ -1,5 +1,13 @@
-<h1>New persona</h1>
+<% content_for :title, "New persona · fabulae" %>
 
-<%= render "form", persona: @persona %>
+<div class="dash">
+  <div class="container">
+    <header class="persona-page-head">
+      <p class="home-eyebrow mb-1">New persona</p>
+      <h1 class="dash-title">Create your persona</h1>
+      <p class="dash-lead">Give it a name, a personality and a way of speaking. You can change everything later.</p>
+    </header>
 
-<%= link_to "Back", personas_path %>
+    <%= render "form", persona: @persona %>
+  </div>
+</div>
