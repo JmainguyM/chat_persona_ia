@@ -1,0 +1,13 @@
+<%# Propositions de messages (rendu initial et mises à jour en direct, voir Chat#broadcast_suggestions) %>
+<% if chat.suggestions.any? %>
+  <div class="chat-suggestions" aria-label="Suggested messages">
+    <% chat.suggestions.each do |suggestion| %>
+      <button type="button"
+              class="chat-suggestion"
+              data-action="suggestions#use"
+              data-suggestion="<%= suggestion %>">
+        <%= suggestion %>
+      </button>
+    <% end %>
+  </div>
+<% end %>

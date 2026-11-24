@@ -1,9 +1,24 @@
 class Chat < ApplicationRecord
   SUGGESTIONS_COUNT = 3
+  # Au-delà, on considère que la réponse n'arrivera plus (job en échec ou jamais lancé)
+  REPLY_TIMEOUT = 2.minutes
 
   belongs_to :user
   belongs_to :persona
   has_many :messages, -> { order(:created_at) }, dependent: :destroy
+
+  # Vrai tant que le persona doit encore répondre : message d'accueil pas encore arrivé,
+  # ou dernier message écrit par l'utilisateur. Sert à afficher "… is typing" et à bloquer l'envoi.
+  def awaiting_reply?
+    last_message = messages.last
+    return created_at > REPLY_TIMEOUT.ago if last_message.nil?
+
+    last_message.role == "user" && last_message.created_at > REPLY_TIMEOUT.ago
+  end
+
+  def broadcast_reply_error
+    broadcast_update_to self, target: "typing", partial: "chats/reply_error", locals: { persona: persona }
+  end
 
   # Premier message de la conversation, écrit par l'IA dans la voix de la persona.
   # Si l'IA ne répond pas, on garde un message générique pour ne pas bloquer la création du chat.
@@ -36,9 +51,16 @@ class Chat < ApplicationRecord
   rescue RubyLLM::Error => e
     Rails.logger.warn("Suggestions failed for chat #{id}: #{e.message}")
     update!(suggestions: [])
+  ensure
+    # Toujours renvoyées à la page (même identiques) : l'envoi d'un message les y a effacées
+    broadcast_suggestions
   end
 
   private
+
+  def broadcast_suggestions
+    broadcast_update_to self, target: "suggestions", partial: "chats/suggestions", locals: { chat: self }
+  end
 
   def suggestions_instructions
     <<~PROMPT

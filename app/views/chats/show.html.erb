@@ -19,41 +19,36 @@
         <%= render "chats/delete_button", chat: @chat %>
       </header>
 
-      <%# MESSAGES %>
-      <section class="chat-messages" aria-label="Messages" aria-live="polite">
-        <% if @chat.messages.any? %>
-          <%= render partial: "chats/message", collection: @chat.messages, locals: { persona: @chat.persona } %>
-        <% else %>
+      <%# MESSAGES : les nouveaux messages arrivent en direct (Turbo Streams, voir Message#broadcast_to_chat) %>
+      <%= turbo_stream_from @chat %>
+      <section class="chat-messages" aria-label="Messages" data-controller="chat-live">
+        <div id="messages" class="chat-message-list" aria-live="polite">
           <div class="chat-empty">
             <p>Say hello to <%= @chat.persona.name %> and ask your first question.</p>
           </div>
-        <% end %>
+          <%= render partial: "chats/message", collection: @chat.messages, locals: { persona: @chat.persona } %>
+        </div>
+        <div id="typing">
+          <%= render "chats/typing", persona: @chat.persona if @chat.awaiting_reply? %>
+        </div>
       </section>
 
       <%# FORMULAIRE D'ENVOI %>
       <section class="chat-composer" aria-label="New message" data-controller="suggestions">
 
-        <%# PROPOSITIONS DE MESSAGES : un clic remplit le champ %>
-        <% if @chat.suggestions.any? %>
-          <div class="chat-suggestions" aria-label="Suggested messages">
-            <% @chat.suggestions.each do |suggestion| %>
-              <button type="button"
-                      class="chat-suggestion"
-                      data-action="suggestions#use"
-                      data-suggestion="<%= suggestion %>">
-                <%= suggestion %>
-              </button>
-            <% end %>
-          </div>
-        <% end %>
+        <%# PROPOSITIONS DE MESSAGES : un clic remplit le champ ; remplacées en direct après chaque réponse %>
+        <div id="suggestions">
+          <%= render "chats/suggestions", chat: @chat unless @chat.awaiting_reply? %>
+        </div>
 
-        <%= simple_form_for [@chat, @message], html: { class: "chat-form" } do |f| %>
+        <%= simple_form_for [@chat, @message],
+                            html: { class: "chat-form", data: { action: "turbo:submit-end->suggestions#reset" } } do |f| %>
           <%= f.input :content,
                       as: :text,
                       label: "Your message",
                       label_html: { class: "visually-hidden" },
                       placeholder: "Ask #{@chat.persona.name} anything…",
-                      input_html: { rows: 2, data: { suggestions_target: "input" } } %>
+                      input_html: { rows: 2, data: { suggestions_target: "input", turbo_permanent: true } } %>
           <%= f.button :submit, "Send", class: "home-btn chat-submit" %>
         <% end %>
       </section>
