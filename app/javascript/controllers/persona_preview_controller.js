@@ -3,7 +3,26 @@ import { Controller } from "@hotwired/stimulus"
 // Aperçu en direct de la carte persona pendant la saisie du formulaire,
 // et exemples de system prompt insérables en un clic.
 export default class extends Controller {
-  static targets = ["nameInput", "descriptionInput", "promptInput", "avatarInput", "name", "description", "avatar"]
+  static targets = ["nameInput", "descriptionInput", "promptInput", "avatarInput", "photoInput", "name", "description", "avatar"]
+  // URL de la photo déjà enregistrée (page d'édition), pour la garder dans l'aperçu
+  static values = { photoUrl: String }
+
+  // Le champ image accepte une URL OU un fichier : taper une URL annule le fichier choisi
+  typeUrl() {
+    if (this.photoInputTarget.value) this.photoInputTarget.value = ""
+    this.photoUrlValue = ""
+    this.update()
+  }
+
+  // Choisir un fichier vide l'URL et affiche le nom du fichier dans le champ
+  pickPhoto() {
+    const file = this.photoInputTarget.files[0]
+    if (!file) return
+
+    this.avatarInputTarget.value = ""
+    this.avatarInputTarget.placeholder = file.name
+    this.update()
+  }
 
   update() {
     const name = this.nameInputTarget.value.trim()
@@ -31,10 +50,12 @@ export default class extends Controller {
   }
 
   renderAvatar(name) {
-    const url = this.avatarInputTarget.value.trim()
+    const file = this.photoInputTarget.files[0]
+    const typed = this.avatarInputTarget.value.trim()
+    const url = file ? URL.createObjectURL(file) : (typed || this.photoUrlValue)
     const frame = this.avatarTarget
 
-    if (/^https?:\/\/\S+$/.test(url)) {
+    if (file || /^(https?:\/\/|\/)\S+$/.test(url)) {
       const img = document.createElement("img")
       img.className = "dash-persona-img"
       img.alt = name

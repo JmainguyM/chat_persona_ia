@@ -1,6 +1,7 @@
 <%# Formulaire de création / édition d'un persona, avec aperçu en direct (persona_preview_controller.js) %>
 
-<div class="persona-editor" data-controller="persona-preview">
+<div class="persona-editor" data-controller="persona-preview"
+     data-persona-preview-photo-url-value="<%= url_for(persona.photo) if persona_photo_saved?(persona) %>">
   <div class="dash-card persona-form-card">
     <%= simple_form_for persona do |f| %>
       <%= f.error_notification %>
@@ -38,11 +39,22 @@
         <% end %>
       </div>
 
+      <%# Un seul champ pour l'image : coller une URL (avatar_url) ou uploader un fichier (photo) %>
       <%= f.input :avatar_url,
-                  label: "Avatar URL",
-                  placeholder: "https://…",
-                  hint: "Optional. A link to an image; initials are used otherwise.",
-                  input_html: { data: { persona_preview_target: "avatarInput", action: "input->persona-preview#update" } } %>
+                  label: "Image",
+                  hint: "Optional. Paste a link or upload a file; initials are used otherwise." do %>
+        <div class="input-group persona-image-field">
+          <%= f.input_field :avatar_url,
+                            class: "form-control",
+                            placeholder: persona_photo_saved?(persona) ? "Photo uploaded. Paste a URL or upload another to replace it" : "https://… or upload a file",
+                            data: { persona_preview_target: "avatarInput", action: "input->persona-preview#typeUrl" } %>
+          <label for="persona_photo" class="btn persona-upload-btn">Upload</label>
+        </div>
+        <%= f.file_field :photo,
+                         accept: "image/*",
+                         class: "d-none",
+                         data: { persona_preview_target: "photoInput", action: "change->persona-preview#pickPhoto" } %>
+      <% end %>
 
       <div class="persona-form-actions">
         <%= link_to "Cancel", dashboard_path(anchor: "my-personas"), class: "home-btn dash-btn-ghost" %>

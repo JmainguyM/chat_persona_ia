@@ -27,6 +27,22 @@
   .dash-persona-body p { overflow-wrap: anywhere; }
 }
 
+// Champ image unique : URL + bouton d'upload collé à droite
+.persona-upload-btn {
+  display: flex;
+  align-items: center;
+  border: 1px solid $home-line;
+  background: $home-rose;
+  color: $home-ink;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover { border-color: $home-garnet; background: #fff; color: $home-ink; }
+}
+
+.persona-image-field:focus-within .persona-upload-btn { border-color: $home-garnet; }
+
 // Exemples de system prompt
 .persona-starters {
   display: flex;
