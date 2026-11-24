@@ -1,0 +1,48 @@
+<% content_for :title, "#{@chat.title} · fabulae" %>
+
+<div class="chat">
+  <div class="container">
+
+    <%= link_to "← Conversations", dashboard_path(anchor: "conversations"), class: "chat-back" %>
+
+    <div class="chat-card">
+
+      <%# EN-TÊTE : persona de la conversation %>
+      <header class="chat-head">
+        <%= persona_avatar(@chat.persona, css_class: "chat-persona-img") %>
+        <div class="chat-persona-text">
+          <h1 class="chat-title"><%= @chat.persona.name %></h1>
+          <% if @chat.persona.description.present? %>
+            <p class="chat-persona-desc"><%= @chat.persona.description %></p>
+          <% end %>
+        </div>
+      </header>
+
+      <%# MESSAGES %>
+      <section class="chat-messages" aria-label="Messages" aria-live="polite">
+        <% if @chat.messages.any? %>
+          <%= render partial: "chats/message", collection: @chat.messages, locals: { persona: @chat.persona } %>
+        <% else %>
+          <div class="chat-empty">
+            <p>Say hello to <%= @chat.persona.name %> and ask your first question.</p>
+          </div>
+        <% end %>
+      </section>
+
+      <%# FORMULAIRE D'ENVOI %>
+      <section class="chat-composer" aria-label="New message">
+        <%= simple_form_for [@chat, @message], html: { class: "chat-form" } do |f| %>
+          <%= f.input :content,
+                      as: :text,
+                      label: "Your message",
+                      label_html: { class: "visually-hidden" },
+                      placeholder: "Ask #{@chat.persona.name} anything…",
+                      input_html: { rows: 2 } %>
+          <%= f.button :submit, "Send", class: "home-btn chat-submit" %>
+        <% end %>
+      </section>
+
+    </div>
+
+  </div>
+</div>

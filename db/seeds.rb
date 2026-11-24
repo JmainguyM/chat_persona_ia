@@ -52,4 +52,15 @@ personas.each do |attrs|
   admin.personas.create!(attrs)
 end
 
+puts "Creating demo chat..."
+sherlock = admin.personas.find_by!(name: "Sherlock Holmes")
+chat = admin.chats.create!(persona: sherlock, title: "Chat with #{sherlock.name}")
+
+chat.messages.create!(role: "user", content: "Good evening, Mr Holmes. Can you tell anything about me?")
+chat.messages.create!(
+  role: "assistant",
+  content: "You have been typing late into the night, judging by the hour of your message. A programmer, I deduce."
+)
+
 puts "Done: #{Persona.count} persona(s) in the database."
+puts "Demo chat ready: http://localhost:3000/chats/#{chat.id}"
