@@ -1,0 +1,12 @@
+<%# Bouton "Chat" d'une carte persona. stretched-link : toute la carte devient cliquable.
+    Connecté : ouvre la conversation (POST). Visiteur : il faut un compte, on l'envoie au login. %>
+<% if user_signed_in? %>
+  <%= button_to persona_chats_path(persona), class: "#{css_class} stretched-link", form_class: "persona-chat-form",
+                aria: { label: "Chat with #{persona.name}" } do %>
+    Chat <span aria-hidden="true">→</span>
+  <% end %>
+<% else %>
+  <%= link_to new_user_session_path, class: "#{css_class} stretched-link", aria: { label: "Log in to chat with #{persona.name}" } do %>
+    Log in to chat <span aria-hidden="true">→</span>
+  <% end %>
+<% end %>

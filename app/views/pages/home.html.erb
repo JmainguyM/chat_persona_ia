@@ -149,23 +149,17 @@
         <h2 class="home-h2">Who do you want to talk to?</h2>
       </div>
       <div class="home-deck">
-        <%# Personas d'exemple en dur, à remplacer par @personas quand le modèle existera %>
-        <% [
-          ["Sherlock Holmes", "A sharp detective who notices every detail and loves a good mystery.", "sherlock.jpg"],
-          ["Albert Einstein", "Curious and playful, he explains the universe with simple thought experiments.", "einstein.jpg"],
-          ["Marie Curie", "Determined and precise, a pioneer who turns every question into an experiment.", "marie-curie.jpg"]
-        ].each_with_index do |(name, description, image), index| %>
-          <div class="home-persona">
-            <%= image_tag image, alt: name, class: "home-persona-img", loading: "lazy" %>
+        <%# Personas de base ; un clic sur la carte ouvre la conversation %>
+        <% @featured_personas.each_with_index do |persona, index| %>
+          <article class="home-persona">
+            <%= persona_avatar(persona, css_class: "home-persona-img") %>
             <span class="home-persona-num"><%= format("%02d", index + 1) %></span>
             <div class="home-persona-info">
-              <h3><%= name %></h3>
-              <p><%= description %></p>
-              <%= link_to personas_path, class: "home-persona-link" do %>
-                Chat <span aria-hidden="true">→</span>
-              <% end %>
+              <h3><%= persona.name %></h3>
+              <p><%= persona.description %></p>
+              <%= render "personas/chat_button", persona: persona, css_class: "home-persona-link" %>
             </div>
-          </div>
+          </article>
         <% end %>
       </div>
     </div>
