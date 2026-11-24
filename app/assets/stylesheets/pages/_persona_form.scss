@@ -1,0 +1,81 @@
+// Création / édition d'un persona : formulaire + aperçu de la carte (réutilise les styles du dashboard)
+.persona-page-head { margin-bottom: 32px; max-width: 640px; }
+
+.persona-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 32px;
+  align-items: start;
+
+  @media (max-width: 991px) {
+    grid-template-columns: minmax(0, 1fr);
+
+    // Sur mobile, l'aperçu passe au-dessus du formulaire
+    .persona-preview { order: -1; max-width: 300px; position: static; }
+  }
+}
+
+.persona-form-card {
+  textarea.form-control { resize: vertical; line-height: 1.5; }
+}
+
+.persona-preview {
+  position: sticky;
+  top: 96px;
+
+  .dash-persona:hover { transform: none; box-shadow: none; }
+  .dash-persona-body p { overflow-wrap: anywhere; }
+}
+
+// Exemples de system prompt
+.persona-starters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: -4px 0 24px;
+}
+
+.persona-starters-label { color: $home-muted; font-size: 0.82rem; margin-right: 4px; }
+
+.persona-starter {
+  padding: 6px 12px;
+  border: 1px solid $home-line;
+  border-radius: 999px;
+  background: $home-rose;
+  color: $home-ink;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:hover { border-color: $home-garnet; background: #fff; }
+  &:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba($home-garnet, 0.2); }
+}
+
+// Signale que l'exemple n'a pas remplacé un prompt déjà écrit
+.persona-flash { animation: persona-flash 0.6s ease; }
+
+@keyframes persona-flash {
+  0%, 100% { border-color: $home-line; }
+  30%, 70% { border-color: $home-garnet; box-shadow: 0 0 0 3px rgba($home-garnet, 0.15); }
+}
+
+.persona-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+
+  .dash-submit { margin-top: 0; }
+
+  @media (max-width: 575px) {
+    > * { flex: 1; justify-content: center; }
+  }
+}
+
+.persona-danger { margin-top: 32px; max-width: calc(100% - 332px); }
+
+@media (max-width: 991px) {
+  .persona-danger { max-width: none; }
+}
