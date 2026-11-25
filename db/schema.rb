@@ -53,13 +53,28 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_25_104419) do
     t.index ["user_id"], name: "index_chats_on_user_id"
   end
 
+  create_table "invitations", force: :cascade do |t|
+    t.bigint "chat_id", null: false
+    t.bigint "inviter_id", null: false
+    t.bigint "invitee_id", null: false
+    t.string "status", default: "pending", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id", "invitee_id"], name: "index_invitations_on_chat_id_and_invitee_id", unique: true
+    t.index ["chat_id"], name: "index_invitations_on_chat_id"
+    t.index ["invitee_id"], name: "index_invitations_on_invitee_id"
+    t.index ["inviter_id"], name: "index_invitations_on_inviter_id"
+  end
+
   create_table "messages", force: :cascade do |t|
     t.bigint "chat_id", null: false
     t.string "role", null: false
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["chat_id"], name: "index_messages_on_chat_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "personas", force: :cascade do |t|
@@ -274,7 +289,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_11_25_104419) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "chats", "personas"
   add_foreign_key "chats", "users"
+  add_foreign_key "invitations", "chats"
+  add_foreign_key "invitations", "users", column: "invitee_id"
+  add_foreign_key "invitations", "users", column: "inviter_id"
   add_foreign_key "messages", "chats"
+  add_foreign_key "messages", "users"
   add_foreign_key "personas", "users"
   add_foreign_key "solid_queue_batch_executions", "solid_queue_batches", column: "batch_id", on_delete: :cascade
   add_foreign_key "solid_queue_batch_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade

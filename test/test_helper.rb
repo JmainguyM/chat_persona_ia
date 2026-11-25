@@ -16,7 +16,7 @@ end
 Chat.prepend(Module.new do
   private
 
-  def new_llm = FakeLlm.new
+  def new_llm(*) = FakeLlm.new
 end)
 
 module ActiveSupport

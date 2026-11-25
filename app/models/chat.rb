@@ -1,4 +1,7 @@
 class Chat < ApplicationRecord
+  include ShareableChat
+  include BillableChat
+
   SUGGESTIONS_COUNT = 3
   # Au-delà, on considère que la réponse n'arrivera plus (job en échec ou jamais lancé)
   REPLY_TIMEOUT = 2.minutes
@@ -28,25 +31,27 @@ class Chat < ApplicationRecord
   end
 
   # Sends the conversation to the AI and saves its reply as an "assistant" message.
+  # The author of the message pays for the reply (old messages without author: the owner).
   def reply_to(user_message)
-    llm = new_llm
-    llm.with_instructions(persona.system_prompt)
+    llm = new_llm(user_message.user || user)
+    llm.with_instructions(reply_instructions)
 
     # Previous messages, so the AI remembers the conversation
-    messages.where.not(id: user_message.id).each do |message|
-      llm.add_message(role: message.role.to_sym, content: message.content)
+    messages.where.not(id: user_message.id).includes(:user).each do |message|
+      llm.add_message(role: message.role.to_sym, content: content_for_llm(message))
     end
 
-    response = llm.ask(user_message.content)
+    response = llm.ask(content_for_llm(user_message))
     messages.create!(role: "assistant", content: response.content)
   end
 
   # Demande à l'IA quelques messages que l'utilisateur pourrait envoyer ensuite,
   # selon l'état de la conversation, et les enregistre.
   # Un échec ici ne doit jamais casser le chat : on vide simplement la liste.
-  def refresh_suggestions!
+  # payer : celui qui paie l'appel (l'auteur du dernier message, ou le propriétaire au démarrage).
+  def refresh_suggestions!(payer: user)
     # L'IA répond un message par ligne
-    text = new_llm.with_instructions(suggestions_instructions).ask(recent_messages_as_text).content
+    text = new_llm(payer).with_instructions(suggestions_instructions).ask(recent_messages_as_text).content
     list = text.lines.map { |line| clean_suggestion(line) }.reject(&:blank?)
     update!(suggestions: list.first(SUGGESTIONS_COUNT))
   rescue RubyLLM::Error => e
@@ -98,30 +103,13 @@ class Chat < ApplicationRecord
 
   # Les 12 derniers messages en texte, un par paragraphe : "User: ..." / "Einstein: ..."
   def recent_messages_as_text
-    messages.last(12).map { |message| "#{author_name(message)}: #{message.content}" }.join("\n\n")
+    messages.includes(:user).last(12).map { |message| "#{author_name(message)}: #{message.content}" }.join("\n\n")
   end
 
   def author_name(message)
-    message.role == "user" ? "User" : persona.name
-  end
+    return persona.name if message.role == "assistant"
 
-  # Nouvelle conversation IA qui utilise explicitement la clé OPENAI_API_KEY (chargée depuis .env).
-  # ENV.fetch lève une erreur claire si la clé est absente.
-  def new_llm
-    context = RubyLLM.context do |config|
-      config.openai_api_key = ENV.fetch("OPENAI_API_KEY")
-    end
-    context.chat(model: "gpt-4o-mini").after_message { |response| record_token_usage(response) }
-  end
-
-  def record_token_usage(response)
-    return unless response.role == :assistant
-
-    user.token_usages.create!(
-      chat: self,
-      input_tokens: response.tokens.input.to_i,
-      output_tokens: response.tokens.output.to_i
-    )
+    message.user&.username || "User"
   end
 
   def ai_greeting

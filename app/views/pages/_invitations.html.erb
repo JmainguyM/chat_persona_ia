@@ -1,0 +1,31 @@
+<%# Invitations en attente. Le conteneur #invitations est toujours présent, même vide :
+    Invitation#broadcast_to_invitee le remplace en direct quand une nouvelle invitation arrive.
+    Ce partial est aussi rendu hors requête (broadcast) : ne jamais y utiliser current_user. %>
+<div id="invitations">
+  <% if invitations.any? %>
+    <section class="dash-section" aria-labelledby="invitations-title">
+      <div class="dash-section-head">
+        <h2 class="dash-h2" id="invitations-title">Invitations</h2>
+      </div>
+      <div class="dash-chats">
+        <% invitations.each do |invitation| %>
+          <article class="dash-chat dash-invite">
+            <%= persona_avatar(invitation.chat.persona, css_class: "dash-chat-img") %>
+            <div class="dash-chat-body">
+              <p>
+                <strong><%= invitation.inviter.username %></strong>
+                invites you to chat with <strong><%= invitation.chat.persona.name %></strong>
+              </p>
+            </div>
+            <div class="dash-invite-actions">
+              <%= button_to "Accept", accept_invitation_path(invitation), method: :patch,
+                                                                          class: "home-btn home-btn-dark" %>
+              <%= button_to "Decline", decline_invitation_path(invitation), method: :patch,
+                                                                            class: "home-btn dash-btn-ghost" %>
+            </div>
+          </article>
+        <% end %>
+      </div>
+    </section>
+  <% end %>
+</div>

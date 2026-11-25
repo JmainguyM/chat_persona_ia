@@ -15,13 +15,29 @@
           <% if @chat.persona.description.present? %>
             <p class="chat-persona-desc"><%= @chat.persona.description %></p>
           <% end %>
+          <% if @chat.members.any? %>
+            <p class="chat-members">
+              With <%= ([@chat.user] + @chat.members).map(&:username).to_sentence %>
+            </p>
+          <% end %>
         </div>
-        <%= render "chats/delete_button", chat: @chat %>
+
+        <%# INVITATION : le propriétaire et les membres peuvent inviter quelqu'un par son pseudo %>
+        <%= form_with url: chat_invitations_path(@chat), class: "chat-invite" do |f| %>
+          <%= f.label :username, "Invite a member", class: "visually-hidden" %>
+          <%= f.text_field :username, placeholder: "Username", required: true,
+                                      autocomplete: "off", class: "chat-invite-input" %>
+          <%= f.submit "Invite", class: "chat-invite-submit" %>
+        <% end %>
+
+        <%# Seul le propriétaire peut supprimer la conversation %>
+        <%= render "chats/delete_button", chat: @chat if @chat.user == current_user %>
       </header>
 
       <%# MESSAGES : les nouveaux messages arrivent en direct (Turbo Streams, voir Message#broadcast_to_chat) %>
       <%= turbo_stream_from @chat %>
-      <section class="chat-messages" aria-label="Messages" data-controller="chat-live">
+      <section class="chat-messages" aria-label="Messages" data-controller="chat-live"
+               data-chat-live-current-user-id-value="<%= current_user.id %>">
         <div id="messages" class="chat-message-list" aria-live="polite">
           <div class="chat-empty">
             <p>Say hello to <%= @chat.persona.name %> and ask your first question.</p>

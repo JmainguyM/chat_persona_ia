@@ -2,7 +2,8 @@ class ChatsController < ApplicationController
   before_action :require_credits_left!, only: :create
 
   def show
-    @chat = current_user.chats.find(params[:id])
+    # Le propriétaire de la conversation ou un invité qui a accepté
+    @chat = Chat.accessible_by(current_user).find(params[:id])
     @message = Message.new
   end
 

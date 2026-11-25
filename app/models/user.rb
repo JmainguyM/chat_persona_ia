@@ -5,6 +5,10 @@ class User < ApplicationRecord
   has_many :personas, dependent: :destroy
   has_many :chats, dependent: :destroy
   has_many :token_usages, dependent: :destroy
+  has_many :received_invitations, class_name: "Invitation", foreign_key: :invitee_id, dependent: :destroy
+  has_many :sent_invitations, class_name: "Invitation", foreign_key: :inviter_id, dependent: :destroy
+  # Messages écrits dans les conversations des autres : ils restent, sans auteur
+  has_many :messages, dependent: :nullify
 
   enum :status, { base: "base", premium: "premium", admin: "admin" }, default: "base", validate: true
 

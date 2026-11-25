@@ -3,6 +3,7 @@ class Message < ApplicationRecord
 
   # touch : met à jour chat.updated_at, pour trier les conversations par activité récente
   belongs_to :chat, touch: true
+  belongs_to :user, optional: true
 
   validates :role, inclusion: { in: ROLES }
   validates :content, presence: true

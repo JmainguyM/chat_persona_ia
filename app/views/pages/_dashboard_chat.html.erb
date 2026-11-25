@@ -9,9 +9,15 @@
       <time datetime="<%= chat.updated_at.iso8601 %>"><%= time_ago_in_words(chat.updated_at) %> ago</time>
     </div>
     <p>
-      <% if last_message.role == "user" %><span class="dash-chat-you">You:</span><% end %>
+      <% if last_message.role == "user" %>
+        <%# Anciens messages sans auteur (avant les invitations) : considérés comme les nôtres %>
+        <span class="dash-chat-you">
+          <%= last_message.user.nil? || last_message.user == current_user ? "You" : last_message.user.username %>:
+        </span>
+      <% end %>
       <%= truncate(last_message.content, length: 140) %>
     </p>
   </div>
-  <%= render "chats/delete_button", chat: chat %>
+  <%# Seul le propriétaire peut supprimer la conversation %>
+  <%= render "chats/delete_button", chat: chat if chat.user == current_user %>
 </article>
