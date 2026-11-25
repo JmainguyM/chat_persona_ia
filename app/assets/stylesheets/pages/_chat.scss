@@ -302,3 +302,59 @@
 
   .chat-message { max-width: 90%; }
 }
+
+// Conversation partagée : membres sous le nom du persona
+.chat-members {
+  margin: 4px 0 0;
+  color: $home-muted;
+  font-size: 0.8rem;
+}
+
+// Invitation d'un membre par son pseudo, calée à droite de l'en-tête (avant le bouton de suppression)
+.chat-head { flex-wrap: wrap; }
+
+.chat-head .chat-invite {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+
+  + .chat-delete-form { margin-left: 0; }
+}
+
+.chat-invite-input {
+  width: 140px;
+  padding: 7px 14px;
+  border: 1px solid $home-line;
+  border-radius: 999px;
+  font-family: $home-font;
+  font-size: 0.85rem;
+
+  &:focus {
+    border-color: $home-garnet;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba($home-garnet, 0.12);
+  }
+}
+
+.chat-invite-submit {
+  padding: 7px 14px;
+  border: 1px solid $home-ink;
+  border-radius: 999px;
+  background: $home-ink;
+  color: #fff;
+  font-family: $home-font;
+  font-size: 0.85rem;
+  font-weight: 600;
+
+  &:hover { opacity: 0.9; }
+}
+
+// Messages des autres participants : à gauche, en clair (classe ajoutée par chat_live_controller.js)
+.chat-message-other {
+  align-self: flex-start;
+  background: $home-rose;
+  color: $home-ink;
+  border: 1px solid $home-line;
+  border-bottom-right-radius: 20px;
+  border-bottom-left-radius: 6px;
+}

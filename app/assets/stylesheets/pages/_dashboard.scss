@@ -440,3 +440,18 @@ a.dash-create {
 
   .dash-create { min-height: 0; }
 }
+
+// Invitations reçues : même carte que les conversations, avec les boutons à droite
+.dash-invite {
+  flex-wrap: wrap;
+
+  .dash-chat-body p { white-space: normal; color: $home-ink; }
+}
+
+.dash-invite-actions {
+  display: flex;
+  gap: 8px;
+
+  form { margin: 0; }
+  .home-btn { padding: 9px 18px; font-size: 0.85rem; border: 1px solid transparent; }
+}

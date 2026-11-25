@@ -1,9 +1,11 @@
-<%# Un message de la conversation. role "user" = l'utilisateur, "assistant" = la persona %>
-<article id="<%= dom_id(message) %>" class="chat-message chat-message-<%= message.role %>">
+<%# Un message de la conversation. role "user" = un participant, "assistant" = la persona.
+    Ce partial est aussi diffusé à tous les participants (Message#broadcast_to_chat), rendu hors requête :
+    ne jamais y utiliser current_user. Les messages des autres sont repérés par chat_live_controller.js %>
+<% author = message.role == "user" ? (message.user&.username || "You") : persona.name %>
+<article id="<%= dom_id(message) %>" class="chat-message chat-message-<%= message.role %>"
+         <%= tag.attributes(data: { author_id: message.user_id }) %>>
   <header class="chat-message-head">
-    <span class="chat-message-author">
-      <%= message.role == "user" ? "You" : persona.name %>
-    </span>
+    <span class="chat-message-author"><%= author %></span>
     <time class="chat-message-date" datetime="<%= message.created_at.iso8601 %>">
       <%= l(message.created_at, format: :short) %>
     </time>

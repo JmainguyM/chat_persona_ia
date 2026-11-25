@@ -22,5 +22,13 @@ Rails.application.routes.draw do
 
   resources :chats, only: %i[show destroy] do
     resources :messages, only: :create
+    resources :invitations, only: :create
+  end
+
+  resources :invitations, only: [] do
+    member do
+      patch :accept
+      patch :decline
+    end
   end
 end

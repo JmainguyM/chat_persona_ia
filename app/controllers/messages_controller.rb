@@ -6,7 +6,7 @@ class MessagesController < ApplicationController
     # Un seul message à la fois : on attend la réponse du persona avant d'en envoyer un autre
     return head :conflict if @chat.awaiting_reply?
 
-    @message = Message.new(message_params.merge(chat: @chat, role: "user"))
+    @message = Message.new(message_params.merge(chat: @chat, role: "user", user: current_user))
     return render("chats/show", status: :unprocessable_entity) unless @message.save
 
     # La réponse de l'IA est demandée en arrière-plan et arrive dans la page via Turbo Streams
@@ -20,7 +20,7 @@ class MessagesController < ApplicationController
   private
 
   def set_chat
-    @chat = current_user.chats.find(params[:chat_id])
+    @chat = Chat.accessible_by(current_user).find(params[:chat_id])
   end
 
   def message_params

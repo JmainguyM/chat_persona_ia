@@ -9,7 +9,8 @@ class ChatReplyJob < ApplicationJob
   def perform(user_message)
     chat = user_message.chat
     chat.reply_to(user_message)
-    chat.refresh_suggestions!
+    # Comme la réponse, les suggestions sont payées par l'auteur du message
+    chat.refresh_suggestions!(payer: user_message.user || chat.user)
   rescue RubyLLM::Error => e
     Rails.logger.error("AI reply failed for chat #{chat.id}: #{e.message}")
     chat.broadcast_reply_error

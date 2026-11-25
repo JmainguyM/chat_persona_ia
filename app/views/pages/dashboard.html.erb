@@ -26,6 +26,10 @@
       <a href="#settings">Settings</a>
     </nav>
 
+    <%# INVITATIONS REÇUES : les nouvelles arrivent en direct (voir Invitation#broadcast_to_invitee) %>
+    <%= turbo_stream_from current_user, :invitations %>
+    <%= render "pages/invitations", invitations: @invitations %>
+
     <%# MES CONVERSATIONS %>
     <section class="dash-section" id="conversations">
       <div class="dash-section-head">
