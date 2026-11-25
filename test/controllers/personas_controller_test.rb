@@ -6,7 +6,8 @@ class PersonasControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.create!(email: "owner@example.com", password: "password123", username: "owner")
     @other = User.create!(email: "other@example.com", password: "password123", username: "other")
-    @persona = @user.personas.create!(name: "Ada Lovelace", system_prompt: "You are Ada.")
+    @persona = @user.personas.create!(name: "Ada Lovelace", system_prompt: "You are Ada.",
+                                      avatar_url: "https://example.com/ada.jpg")
     sign_in @user
   end
 
@@ -19,9 +20,18 @@ class PersonasControllerTest < ActionDispatch::IntegrationTest
 
   test "create a persona and go back to the dashboard" do
     assert_difference("@user.personas.count", 1) do
-      post personas_path, params: { persona: { name: "Coach", system_prompt: "You are a coach." } }
+      post personas_path, params: { persona: { name: "Coach", system_prompt: "You are a coach.",
+                                               avatar_url: "https://example.com/coach.jpg" } }
     end
     assert_redirected_to dashboard_path(anchor: "my-personas")
+  end
+
+  test "create without image re-renders the form with an error" do
+    assert_no_difference("Persona.count") do
+      post personas_path, params: { persona: { name: "Coach", system_prompt: "You are a coach." } }
+    end
+    assert_response :unprocessable_entity
+    assert_includes response.body, "paste a link or upload a photo"
   end
 
   test "create without system prompt re-renders the form" do
@@ -61,7 +71,8 @@ class PersonasControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "built_in cannot be set through the form" do
-    post personas_path, params: { persona: { name: "Fake", system_prompt: "You are fake.", built_in: true } }
+    post personas_path, params: { persona: { name: "Fake", system_prompt: "You are fake.", built_in: true,
+                                             avatar_url: "https://example.com/fake.jpg" } }
     assert_not Persona.find_by!(name: "Fake").built_in?
   end
 
@@ -93,7 +104,7 @@ class PersonasControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "signed-in users can start a chat from the explore page, and edit only their own personas" do
-    @other.personas.create!(name: "Coach", system_prompt: "You are a coach.")
+    @other.personas.create!(name: "Coach", system_prompt: "You are a coach.", avatar_url: "https://example.com/coach.jpg")
 
     get personas_path
     assert_select "form[action='#{persona_chats_path(@persona)}'] button", text: /Chat/

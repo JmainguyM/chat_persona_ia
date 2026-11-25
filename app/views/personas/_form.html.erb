@@ -42,7 +42,8 @@
       <%# Un seul champ pour l'image : coller une URL (avatar_url) ou uploader un fichier (photo) %>
       <%= f.input :avatar_url,
                   label: "Image",
-                  hint: "Optional. Paste a link or upload a file; initials are used otherwise." do %>
+                  required: true,
+                  hint: "Paste a link or upload a file. It is shown on the persona card." do %>
         <div class="input-group persona-image-field">
           <%= f.input_field :avatar_url,
                             class: "form-control",
