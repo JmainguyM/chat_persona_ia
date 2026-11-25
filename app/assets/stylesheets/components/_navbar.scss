@@ -46,6 +46,16 @@
   &:hover { color: $home-garnet; }
 }
 
+.fab-credits {
+  padding: 6px 12px;
+  border: 1px solid $home-line;
+  border-radius: 999px;
+  color: $home-muted;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 .fab-btn {
   justify-content: center;
   padding: 10px 20px;
@@ -130,6 +140,11 @@
   }
 
   // Connecté : nom de l'utilisateur puis "Log out" sur toute la largeur
+  .fab-navbar .fab-credits {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
   .fab-navbar .fab-user {
     grid-column: 1 / -1;
     color: $home-muted;

@@ -24,6 +24,9 @@
 
       <div class="fab-auth">
         <% if user_signed_in? %>
+          <span class="fab-credits">
+            <%= current_user.unlimited_credits? ? "Unlimited credits" : pluralize(current_user.credits_left_today, "credit") %>
+          </span>
           <%= link_to dashboard_path, class: "fab-user" do %>
             <%= current_user.username.presence || current_user.email %>
           <% end %>

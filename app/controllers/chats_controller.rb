@@ -1,4 +1,6 @@
 class ChatsController < ApplicationController
+  before_action :require_credits_left!, only: :create
+
   def show
     @chat = current_user.chats.find(params[:id])
     @message = Message.new

@@ -9,6 +9,13 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def require_credits_left!
+    return unless current_user.out_of_credits?
+
+    redirect_back fallback_location: dashboard_path,
+                  alert: "You have used all your credits for today. They will be back tomorrow."
+  end
+
   # Où Devise redirige après login, sign up et modification du compte.
   def signed_in_root_path(_resource)
     dashboard_path

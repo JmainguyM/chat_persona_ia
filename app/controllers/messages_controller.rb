@@ -1,5 +1,6 @@
 class MessagesController < ApplicationController
   before_action :set_chat
+  before_action :require_credits_left!, only: :create
 
   def create
     # Un seul message à la fois : on attend la réponse du persona avant d'en envoyer un autre
