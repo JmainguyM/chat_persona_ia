@@ -88,4 +88,20 @@ class ChatsControllerTest < ActionDispatch::IntegrationTest
     assert_select "turbo-cable-stream-source"
     assert_select "#typing .chat-typing", text: /Ada Lovelace is typing/
   end
+
+  test "cannot start a conversation without credits left" do
+    @user.token_usages.create!(input_tokens: 20_000, output_tokens: 0)
+
+    assert_no_difference("Chat.count") { post persona_chats_path(@persona) }
+    assert_redirected_to dashboard_path
+  end
+
+  test "the navbar shows the credits left" do
+    get dashboard_path
+    assert_select ".fab-credits", text: "200 credits"
+
+    @user.admin!
+    get dashboard_path
+    assert_select ".fab-credits", text: "Unlimited credits"
+  end
 end

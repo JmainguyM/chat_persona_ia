@@ -1,3 +1,4 @@
+<%= turbo_stream_from current_user, :credits if user_signed_in? %>
 <nav class="navbar navbar-expand-md fab-navbar">
   <div class="container">
     <%= link_to root_path, class: "navbar-brand fab-logo" do %>
@@ -24,6 +25,7 @@
 
       <div class="fab-auth">
         <% if user_signed_in? %>
+          <%= render "shared/credits", user: current_user %>
           <%= link_to dashboard_path, class: "fab-user" do %>
             <%= current_user.username.presence || current_user.email %>
           <% end %>

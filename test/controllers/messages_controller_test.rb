@@ -38,4 +38,16 @@ class MessagesControllerTest < ActionDispatch::IntegrationTest
     end
     assert_response :unprocessable_entity
   end
+
+  test "cannot send a message without credits left" do
+    @user.token_usages.create!(input_tokens: 20_000, output_tokens: 0)
+
+    assert_no_enqueued_jobs do
+      assert_no_difference("Message.count") do
+        post chat_messages_path(@chat), params: { message: { content: "Hello?" } }
+      end
+    end
+    assert_redirected_to dashboard_path
+    assert_match "credits", flash[:alert]
+  end
 end

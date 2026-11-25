@@ -6,6 +6,7 @@ class Chat < ApplicationRecord
   belongs_to :user
   belongs_to :persona
   has_many :messages, -> { order(:created_at) }, dependent: :destroy
+  has_many :token_usages, dependent: :nullify
 
   # Vrai tant que le persona doit encore répondre : message d'accueil pas encore arrivé,
   # ou dernier message écrit par l'utilisateur. Sert à afficher "… is typing" et à bloquer l'envoi.
@@ -110,7 +111,17 @@ class Chat < ApplicationRecord
     context = RubyLLM.context do |config|
       config.openai_api_key = ENV.fetch("OPENAI_API_KEY")
     end
-    context.chat(model: "gpt-4o-mini")
+    context.chat(model: "gpt-4o-mini").after_message { |response| record_token_usage(response) }
+  end
+
+  def record_token_usage(response)
+    return unless response.role == :assistant
+
+    user.token_usages.create!(
+      chat: self,
+      input_tokens: response.tokens.input.to_i,
+      output_tokens: response.tokens.output.to_i
+    )
   end
 
   def ai_greeting
