@@ -441,7 +441,11 @@ a.dash-create {
   .dash-create { min-height: 0; }
 }
 
-// Invitations reçues : même carte que les conversations, avec les boutons à droite
+// Invitations reçues : même carte que les conversations, avec les boutons à droite.
+// La section est dans le conteneur #invitations : ".dash-section + .dash-section" ne s'applique pas,
+// on remet donc le même espace sous elle.
+.dash-invitations { margin-bottom: 56px; }
+
 .dash-invite {
   flex-wrap: wrap;
 

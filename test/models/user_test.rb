@@ -50,7 +50,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "deleting a chat does not give credits back" do
-    persona = @user.personas.create!(name: "Sherlock Holmes", system_prompt: "You are Sherlock.")
+    persona = @user.personas.create!(name: "Sherlock Holmes", system_prompt: "You are Sherlock.",
+                                     avatar_url: "https://example.com/avatar.jpg")
     chat = @user.chats.create!(persona: persona)
     @user.token_usages.create!(chat: chat, input_tokens: 20_000, output_tokens: 0)
 

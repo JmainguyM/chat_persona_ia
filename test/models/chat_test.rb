@@ -3,7 +3,8 @@ require "test_helper"
 class ChatTest < ActiveSupport::TestCase
   setup do
     user = User.create!(email: "model@example.com", password: "password123", username: "model")
-    persona = user.personas.create!(name: "Sherlock Holmes", system_prompt: "You are Sherlock.")
+    persona = user.personas.create!(name: "Sherlock Holmes", system_prompt: "You are Sherlock.",
+                                    avatar_url: "https://example.com/avatar.jpg")
     @chat = user.chats.create!(persona: persona)
   end
 
