@@ -82,12 +82,15 @@ else
   Persona.destroy_all
   User.destroy_all
 
-  puts "Creating demo user..."
+  puts "Creating demo users..."
   admin = User.create!(
     email: "admin@chatpersona.dev",
     username: "admin",
-    password: "password"
+    password: "password",
+    status: "admin"
   )
+  User.create!(email: "premium@chatpersona.dev", username: "premium", password: "password", status: "premium")
+  User.create!(email: "base@chatpersona.dev", username: "base", password: "password", status: "base")
 
   puts "Creating personas..."
   seed_built_in_personas(admin)
