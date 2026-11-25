@@ -48,7 +48,9 @@
                       label: "Your message",
                       label_html: { class: "visually-hidden" },
                       placeholder: "Ask #{@chat.persona.name} anything…",
-                      input_html: { rows: 2, data: { suggestions_target: "input", turbo_permanent: true } } %>
+                      input_html: { rows: 2, data: { suggestions_target: "input", turbo_permanent: true,
+                                                     controller: "submit-on-enter",
+                                                     action: "keydown->submit-on-enter#submit" } } %>
           <%= f.button :submit, "Send", class: "home-btn chat-submit" %>
         <% end %>
       </section>
