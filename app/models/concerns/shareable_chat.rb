@@ -23,9 +23,9 @@ module ShareableChat
 
   # À plusieurs, le persona doit savoir que chaque message commence par le nom de son auteur
   def reply_instructions
-    return persona.system_prompt unless shared?
+    return persona.instructions_for_llm unless shared?
 
-    "#{persona.system_prompt}\n\nSeveral people take part in this conversation. " \
+    "#{persona.instructions_for_llm}\n\nSeveral people take part in this conversation. " \
       "Each user message starts with the author's name followed by a colon. " \
       "Address people by name when relevant, but never start your own reply with a name and a colon."
   end
