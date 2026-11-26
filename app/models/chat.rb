@@ -114,7 +114,7 @@ class Chat < ApplicationRecord
 
   def ai_greeting
     llm = new_llm
-    llm.with_instructions(persona.system_prompt)
+    llm.with_instructions(persona.instructions_for_llm)
     llm.ask(
       "Start the conversation: greet the user in one or two short sentences, in character, " \
       "and invite them to talk. Always write in English."
