@@ -83,7 +83,8 @@ class Chat < ApplicationRecord
       2. one that opens a new but related angle,
       3. one that is more personal, playful or challenging.
 
-      Always write the suggestions in English, whatever the language of the conversation.
+      Write the suggestions in the language of the user's last message.
+      If the user has not written anything yet, write them in English.
       Answer with exactly #{SUGGESTIONS_COUNT} lines, one message per line,
       no numbering, no quotes, no speaker label (never start with "User:"), nothing else.
     PROMPT
